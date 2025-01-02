@@ -1,0 +1,117 @@
+:root {
+    /* Light theme (default) */
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --card-bg: #ffffff;
+    --border-color: #ddd;
+    --filter-bg: #f8f9fa;
+    --cart-bg: #f8f9fa;
+}
+
+[data-theme="dark"] {
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --bg-color: #1a1a1a;
+    --card-bg: #2c2c2c;
+    --border-color: #4a4a4a;
+    --filter-bg: #2c2c2c;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    display: grid;
+    grid-template-areas: "cart" "books";
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cart {
+    grid-area: cart;
+    width: 100%;
+}
+
+.books {
+    grid-area: books;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .container {
+        grid-template-columns: 300px 1fr;
+        grid-template-areas: "cart books";
+    }
+    
+    .cart {
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+        width: 300px;
+    }
+    
+    .books {
+        min-width: 0; /* Important for preventing grid blowout */
+    }
+}
+
+/* Remove any conflicting styles */
+.book-card, .cart-item {
+    box-sizing: border-box;
+}
+
+.book-card {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    max-width: 250px; /* Adjust the width as needed */
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+/* Additional styles to ensure contrast */
+search-filter {
+    background-color: var(--filter-bg);
+    color: var(--text-color);
+}
+
+shopping-cart {
+    background-color: var(--cart-bg);
+    color: var(--text-color);
+    border-radius: 8px;
+}
+
+/* Override any light-specific styles in components */
+button {
+    border-color: var(--border-color);
+}
+
+select, input {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+select option {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}

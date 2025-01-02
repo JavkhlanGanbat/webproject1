@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore</title>
+    <!-- Preconnect to origins -->
+    <link rel="preconnect" href="https://your-image-cdn.com" crossorigin>
+    <link rel="dns-prefetch" href="https://your-image-cdn.com">
+    
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="client/css/styles.css" as="style">
+    <link rel="stylesheet" href="client/css/styles.css">
+    <script defer>
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+    <script type="module" defer>
+        import { Router } from '/client/js/router.js';
+        Router.init();
+    </script>
+</head>
+<body>
+    <store-header></store-header>
+    <div class="container">
+        <div class="cart">
+            <shopping-cart></shopping-cart>
+        </div>
+        <div class="books">
+            <book-list></book-list>
+        </div>
+    </div>
+    <script type="module" src="/client/js/app.js"></script>
+</body>
+</html>

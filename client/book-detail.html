@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details | Bookstore</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</head>
+<body>
+    <store-header></store-header>
+    <main class="container">
+        <div class="cart">
+            <shopping-cart></shopping-cart>
+        </div>
+        <book-detail></book-detail>
+    </main>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="components/book-detail.js"></script>
+    <script type="module">
+        import { Router } from './js/router.js';
+        Router.init();
+
+        // Update page title when book loads
+        document.querySelector('book-detail').addEventListener('bookloaded', (e) => {
+            document.title = `${e.detail.title} | Bookstore`;
+        });
+    </script>
+</body>
+</html>
