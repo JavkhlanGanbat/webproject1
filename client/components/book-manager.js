@@ -1,4 +1,5 @@
 import { BookService } from '../js/services/BookService.js';
+import './modal-dialog.js';
 
 class BookManager extends HTMLElement {
     constructor() {
@@ -9,6 +10,7 @@ class BookManager extends HTMLElement {
             showAddForm: false,
             error: null
         };
+        this.handleModalClose = this.handleModalClose.bind(this);
     }
 
     async connectedCallback() {
@@ -89,6 +91,11 @@ class BookManager extends HTMLElement {
         }
     }
 
+    handleModalClose() {
+        this.state.showAddForm = false;
+        this.render();
+    }
+
     render() {
         this.shadowRoot.innerHTML = `
             <style>
@@ -105,34 +112,100 @@ class BookManager extends HTMLElement {
                     border-radius: 4px;
                 }
                 .book-grid {
-                    display: grid;
-                    gap: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
                     margin-top: 20px;
                 }
                 .book-item {
                     background: white;
-                    padding: 15px;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    display: flex;
-                    justify-content: space-between;
+                    padding: 12px 16px;
+                    border-radius: 6px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    display: grid;
+                    grid-template-columns: minmax(200px, 2fr) minmax(80px, 1fr) minmax(100px, 1fr) 140px;
                     align-items: center;
+                    gap: 16px;
+                    transition: all 0.2s ease;
+                }
+                .book-item:hover {
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                    transform: translateY(-1px);
+                }
+                .book-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    min-width: 0;
+                }
+                .book-info h3 {
+                    margin: 0;
+                    font-size: 1rem;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .book-info p {
+                    margin: 0;
+                    font-size: 0.9rem;
+                    color: #666;
+                }
+                .actions {
+                    display: flex;
+                    gap: 8px;
+                    justify-content: flex-end;
                 }
                 .actions button {
-                    padding: 8px 16px;
-                    border-radius: 4px;
+                    padding: 6px 12px;
+                    font-size: 0.9rem;
                     border: none;
+                    border-radius: 4px;
                     cursor: pointer;
-                    margin-left: 10px;
-                    transition: all 0.2s;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 60px;
                 }
                 .edit-btn {
-                    background: #007bff;
+                    background: #e8f4ff;
+                    color: #0066cc;
+                }
+                .edit-btn:hover {
+                    background: #0066cc;
                     color: white;
                 }
                 .delete-btn {
-                    background: #dc3545;
+                    background: #ffe8e8;
+                    color: #cc0000;
+                }
+                .delete-btn:hover {
+                    background: #cc0000;
                     color: white;
+                }
+                @media (max-width: 768px) {
+                    .book-item {
+                        grid-template-columns: 1fr auto;
+                        grid-template-rows: auto auto;
+                        gap: 8px;
+                        padding: 12px;
+                    }
+                    .book-info {
+                        grid-column: 1 / -1;
+                    }
+                    .actions {
+                        grid-column: 1 / -1;
+                        justify-content: flex-start;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .book-manager {
+                        padding: 10px;
+                    }
+                    .actions button {
+                        flex: 1;
+                        padding: 8px;
+                    }
                 }
                 .add-btn {
                     background: #28a745;
@@ -143,15 +216,66 @@ class BookManager extends HTMLElement {
                     cursor: pointer;
                     font-size: 1rem;
                 }
+                .cancel-btn {
+                    background: #ffc107;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    transition: all 0.2s ease;
+                }
+                .cancel-btn:hover {
+                    background: #e0a800;
+                }
                 .add-form {
                     background: white;
+                    width: 100%;
+                    height: 70vh;
+                    display: flex;
+                    flex-direction: column;
+                    box-sizing: border-box;
+                }
+                .form-header {
                     padding: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    margin-top: 20px;
+                    background: white;
+                    border-bottom: 1px solid #eee;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 0;
+                }
+                .form-content {
+                    padding: 20px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    flex: 1;
+                }
+                .form-content::-webkit-scrollbar {
+                    width: 8px;
+                }
+                .form-content::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .form-content::-webkit-scrollbar-thumb {
+                    background: #ddd;
+                    border-radius: 4px;
+                }
+                .form-content::-webkit-scrollbar-thumb:hover {
+                    background: #bbb;
+                }
+                .form-actions {
+                    padding: 15px 20px;
+                    background: white;
+                    border-top: 1px solid #eee;
+                    display: flex;
+                    gap: 10px;
+                    margin: 0;
                 }
                 .form-group {
                     margin-bottom: 15px;
+                    box-sizing: border-box;
                 }
                 .form-group label {
                     display: block;
@@ -162,17 +286,31 @@ class BookManager extends HTMLElement {
                     padding: 8px;
                     border: 1px solid #ddd;
                     border-radius: 4px;
+                    box-sizing: border-box;
                 }
-                .form-actions {
+                .close-btn {
+                    background: transparent;
+                    border: none;
+                    font-size: 1.5rem;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
                     display: flex;
-                    gap: 10px;
-                    margin-top: 20px;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    color: #666;
+                }
+                .close-btn:hover {
+                    background: #f0f0f0;
+                    color: #333;
                 }
             </style>
             <div class="book-manager">
                 <h2>Manage Books</h2>
                 <button class="add-btn" onclick="this.getRootNode().host.toggleAddForm()">
-                    ${this.state.showAddForm ? 'Cancel' : 'Add New Book'}
+                    Add New Book
                 </button>
                 
                 ${this.state.error ? `
@@ -180,85 +318,94 @@ class BookManager extends HTMLElement {
                 ` : ''}
 
                 ${this.state.showAddForm ? `
-                    <form class="add-form" onsubmit="this.getRootNode().host.handleAddBook(event)">
-                        <div class="form-group">
-                            <label for="title">Title *</label>
-                            <input type="text" name="title" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="author">Author *</label>
-                            <input type="text" name="author" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price *</label>
-                            <input type="number" name="price" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="category">Category *</label>
-                            <select name="category" required>
-                                <option value="fiction">Fiction</option>
-                                <option value="non-fiction">Non-Fiction</option>
-                                <option value="science">Science</option>
-                                <option value="technology">Technology</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="isbn">ISBN *</label>
-                            <input type="text" name="isbn" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="publish_date">Publish Date</label>
-                            <input type="date" name="publish_date">
-                        </div>
-                        <div class="form-group">
-                            <label for="publisher">Publisher</label>
-                            <input type="text" name="publisher">
-                        </div>
-                        <div class="form-group">
-                            <label for="language">Language</label>
-                            <input type="text" name="language">
-                        </div>
-                        <div class="form-group">
-                            <label for="pages">Pages</label>
-                            <input type="number" name="pages" min="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="format">Format</label>
-                            <select name="format">
-                                <option value="hardcover">Hardcover</option>
-                                <option value="paperback">Paperback</option>
-                                <option value="ebook">E-Book</option>
-                                <option value="audiobook">Audiobook</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea name="description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="cover_image">Cover Image URL</label>
-                            <input type="url" name="cover_image">
-                        </div>
-                        <div class="form-group">
-                            <label for="rating">Rating (0-5)</label>
-                            <input type="number" name="rating" min="0" max="5" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="reviews">Number of Reviews</label>
-                            <input type="number" name="reviews" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="in_stock">In Stock</label>
-                            <select name="in_stock">
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
-                            </select>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="add-btn">Add Book</button>
-                            <button type="button" onclick="this.getRootNode().host.toggleAddForm()" class="delete-btn">Cancel</button>
-                        </div>
-                    </form>
+                    <modal-dialog>
+                        <form class="add-form" onsubmit="this.getRootNode().host.handleAddBook(event)">
+                            <div class="form-header">
+                                <h3>Add New Book</h3>
+                                <button type="button" class="close-btn" 
+                                    onclick="this.getRootNode().host.handleModalClose()">×</button>
+                            </div>
+                            <div class="form-content">
+                                <div class="form-group">
+                                    <label for="title">Title *</label>
+                                    <input type="text" name="title" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="author">Author *</label>
+                                    <input type="text" name="author" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Price *</label>
+                                    <input type="number" name="price" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">Category *</label>
+                                    <select name="category" required>
+                                        <option value="fiction">Fiction</option>
+                                        <option value="non-fiction">Non-Fiction</option>
+                                        <option value="science">Science</option>
+                                        <option value="technology">Technology</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="isbn">ISBN *</label>
+                                    <input type="text" name="isbn" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="publish_date">Publish Date</label>
+                                    <input type="date" name="publish_date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="publisher">Publisher</label>
+                                    <input type="text" name="publisher">
+                                </div>
+                                <div class="form-group">
+                                    <label for="language">Language</label>
+                                    <input type="text" name="language">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pages">Pages</label>
+                                    <input type="number" name="pages" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="format">Format</label>
+                                    <select name="format">
+                                        <option value="hardcover">Hardcover</option>
+                                        <option value="paperback">Paperback</option>
+                                        <option value="ebook">E-Book</option>
+                                        <option value="audiobook">Audiobook</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea name="description"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cover_image">Cover Image URL</label>
+                                    <input type="url" name="cover_image">
+                                </div>
+                                <div class="form-group">
+                                    <label for="rating">Rating (0-5)</label>
+                                    <input type="number" name="rating" min="0" max="5" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="reviews">Number of Reviews</label>
+                                    <input type="number" name="reviews" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="in_stock">In Stock</label>
+                                    <select name="in_stock">
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="add-btn">Add Book</button>
+                                <button type="button" onclick="this.getRootNode().host.toggleAddForm()" class="cancel-btn">Cancel</button>
+                            </div>
+                        </form>
+                    </modal-dialog>
                 ` : ''}
 
                 <div class="book-grid">
@@ -267,8 +414,9 @@ class BookManager extends HTMLElement {
                             <div class="book-info">
                                 <h3>${book.title}</h3>
                                 <p>by ${book.author}</p>
-                                <p>$${book.price}</p>
                             </div>
+                            <div>$${book.price}</div>
+                            <div>${book.category}</div>
                             <div class="actions">
                                 <button class="edit-btn" onclick="this.getRootNode().host.editBook(${book.id})">Edit</button>
                                 <button class="delete-btn" onclick="this.getRootNode().host.handleDeleteBook(${book.id})">Delete</button>
@@ -278,6 +426,12 @@ class BookManager extends HTMLElement {
                 </div>
             </div>
         `;
+
+        // Add event listener for modal close
+        const modal = this.shadowRoot.querySelector('modal-dialog');
+        if (modal) {
+            modal.addEventListener('modal-close', this.handleModalClose);
+        }
     }
 }
 
