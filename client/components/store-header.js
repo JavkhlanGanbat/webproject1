@@ -1,5 +1,3 @@
-import { ThemeStore } from '../services/state/ThemeStore.js';
-
 class StoreHeader extends HTMLElement {
     constructor() {
         super();
@@ -7,20 +5,27 @@ class StoreHeader extends HTMLElement {
     }
 
     connectedCallback() {
-        ThemeStore.subscribe(() => this.updateThemeButton());
-        ThemeStore.init();
         this.render();
+        this.setupTheme();
+    }
+
+    setupTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        const themeToggle = this.shadowRoot.getElementById('themeToggle');
+        themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
     }
 
     toggleTheme() {
-        ThemeStore.toggle();
-    }
-
-    updateThemeButton() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
         const themeToggle = this.shadowRoot.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.textContent = ThemeStore.current === 'light' ? '🌙' : '☀️';
-        }
+        themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
     }
 
     render() {
