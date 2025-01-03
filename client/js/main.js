@@ -1,3 +1,4 @@
+
 import '/client/js/likesStorage.js';
 import '/client/components/search-filter.js';
 import '/client/components/store-header.js';
