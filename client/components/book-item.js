@@ -152,14 +152,14 @@ class BookItem extends HTMLElement {
                 <div class="book-info">
                     <span class="category-tag">${category}</span>
                     <h3>${title}</h3>
-                    <p class="author">By ${author}</p>
-                    <p class="price">$${price}</p>
+                    <p class="author">${author}</p>
+                    <p class="price">₮${price}</p>
                     <div class="book-actions">
                         <button class="cart-button" onclick="this.getRootNode().host.addToCart()">
-                            Add to Cart
+                            🛒
                         </button>
                         <button class="info-button" onclick="this.getRootNode().host.showDetails()">
-                            Info
+                            Харах
                         </button>
                         <button class="like-btn" onclick="this.getRootNode().host.toggleLike()">
                             ${isLiked ? '❤️' : '🤍'}

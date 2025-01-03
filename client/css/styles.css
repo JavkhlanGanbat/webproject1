@@ -92,6 +92,29 @@ body {
     color: var(--text-color);
 }
 
+/* Ensure the book-actions element does not overflow */
+.book-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden; /* Prevent overflow */
+    padding: 10px; /* Add padding if necessary */
+}
+
+/* Ensure the like button is visible and properly positioned */
+.book-actions .like-button {
+    position: relative; /* Ensure it stays within the parent */
+    z-index: 1; /* Bring it to the front if necessary */
+}
+
+/* Additional styles for the card to ensure proper layout */
+.card {
+    position: relative;
+    overflow: hidden; /* Prevent content from overflowing */
+    padding: 20px; /* Adjust padding as needed */
+    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+}
+
 /* Additional styles to ensure contrast */
 search-filter {
     background-color: var(--filter-bg);

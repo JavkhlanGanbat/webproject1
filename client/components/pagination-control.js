@@ -63,13 +63,13 @@ class PaginationControl extends HTMLElement {
                 <button class="page-button" 
                     data-page="${currentPage - 1}"
                     ${currentPage <= 1 ? 'disabled' : ''}>
-                    Previous
+                    <-
                 </button>
                 ${this.generatePageButtons(currentPage, totalPages)}
                 <button class="page-button"
                     data-page="${currentPage + 1}"
                     ${currentPage >= totalPages ? 'disabled' : ''}>
-                    Next
+                    ->
                 </button>
             </div>
         `;

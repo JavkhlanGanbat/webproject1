@@ -409,45 +409,45 @@ class BookDetail extends HTMLElement {
                     } 
                 }
             </style>
-            <div class="detail-container">
-                <div class="image-section">
-                    <img src="${book.coverImage}" alt="${book.title}" class="book-image">
-                </div>
-                <div class="info-section">
-                    <span class="book-category">${book.category}</span>
-                    <h1 class="book-title">${book.title}</h1>
-                    <div class="book-author">by ${book.author}</div>
-                    <div class="book-price">$${book.price}</div>
-                    <p class="book-description">${book.description}</p>
-                    
-                    <div class="details-grid">
-                        ${Object.entries({
-                            ISBN: book.isbn,
-                            Published: book.publishDate,
-                            Pages: book.pages,
-                            Language: book.language,
-                            Publisher: book.publisher,
-                            Format: book.format
-                        }).map(([label, value]) => `
-                            <div class="detail-item">
-                                <span class="detail-label">${label}:</span>
-                                <span class="detail-value">${value}</span>
-                            </div>
-                        `).join('')}
+    <div class="detail-container">
+        <div class="image-section">
+            <img src="${book.coverImage}" alt="${book.title}" class="book-image">
+        </div>
+        <div class="info-section">
+            <span class="book-category">${book.category}</span>
+            <h1 class="book-title">${book.title}</h1>
+            <div class="book-author">Зохиогч: ${book.author}</div>
+            <div class="book-price">Үнэ: ₮${book.price}</div>
+            <p class="book-description">${book.description}</p>
+            
+            <div class="details-grid">
+                ${Object.entries({
+                    ISBN: book.isbn,
+                    Published: book.publishDate,
+                    Pages: book.pages,
+                    Language: book.language,
+                    Publisher: book.publisher,
+                    Format: book.format
+                }).map(([label, value]) => `
+                    <div class="detail-item">
+                        <span class="detail-label">${label}:</span>
+                        <span class="detail-value">${value}</span>
                     </div>
-
-                    <div class="action-buttons">
-                        <button class="action-button add-to-cart" 
-                                onclick="this.getRootNode().host.addToCart()">
-                            Add to Cart
-                        </button>
-                        <button class="action-button back-button" 
-                                onclick="window.history.back()">
-                            Back to Books
-                        </button>
-                    </div>
-                </div>
+                `).join('')}
             </div>
+
+            <div class="action-buttons">
+                <button class="action-button add-to-cart" 
+                        onclick="this.getRootNode().host.addToCart()">
+                    Сагсанд нэмэх
+                </button>
+                <button class="action-button back-button" 
+                        onclick="window.history.back()">
+                    Номнууд руу буцах
+                </button>
+            </div>
+        </div>
+    </div>
         `;
     }
 

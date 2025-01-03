@@ -25,7 +25,7 @@ export class CartItem extends HTMLElement {
             <div class="cart-item">
                 <span>${title}</span>
                 <div>
-                    <span>$${price}</span>
+                    <span>₮${price}</span>
                     <button class="remove-btn" data-index="${index}">×</button>
                 </div>
             </div>

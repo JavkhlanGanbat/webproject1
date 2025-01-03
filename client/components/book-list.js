@@ -25,7 +25,7 @@ class BookList extends HTMLElement {
             itemsPerPage: 10,
             filters: {
                 search: params.get('search') || '',
-                sort: params.get('sort') || 'alphabetical',
+                sort: params.get('sort'),
                 category: params.get('category') || 'all'
             },
             books: [],
@@ -168,10 +168,10 @@ class BookList extends HTMLElement {
                 data-category="${this.state.filters.category}">
             </search-filter>
             <div class="results-count">
-                Showing ${this.state.books.length} books
+                Нийт ${this.state.books.length} ном
                 ${this.hasActiveFilters() ? `
                     <button class="clear-filters" onclick="this.getRootNode().host.clearFilters()">
-                        Clear Filters
+                        Шүүлтүүрийг цэвэрлэх
                     </button>
                 ` : ''}
             </div>
@@ -187,7 +187,7 @@ class BookList extends HTMLElement {
                             data-image="${book.cover_image}">
                         </book-item>
                     `).join('')
-                    : '<div class="no-results">No books found matching your criteria</div>'
+                    : '<div class="no-results">Таны хайлтын дагуу ном олдсонгүй</div>'
                 }
             </div>
             <pagination-control
@@ -195,6 +195,7 @@ class BookList extends HTMLElement {
                 total-pages="${this.state.totalPages}"
                 items-per-page="${this.state.itemsPerPage}">
             </pagination-control>
+
         `;
     }
 
@@ -218,7 +219,7 @@ class BookList extends HTMLElement {
     clearFilters() {
         this.state.filters = {
             search: '',
-            sort: 'alphabetical',
+            sort: 'none',
             category: 'all'
         };
         this.render();

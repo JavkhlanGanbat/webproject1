@@ -308,9 +308,9 @@ class BookManager extends HTMLElement {
                 }
             </style>
             <div class="book-manager">
-                <h2>Manage Books</h2>
+                <h2>Админ хуудас</h2>
                 <button class="add-btn" onclick="this.getRootNode().host.toggleAddForm()">
-                    Add New Book
+                    Ном нэмэх
                 </button>
                 
                 ${this.state.error ? `
@@ -321,25 +321,25 @@ class BookManager extends HTMLElement {
                     <modal-dialog>
                         <form class="add-form" onsubmit="this.getRootNode().host.handleAddBook(event)">
                             <div class="form-header">
-                                <h3>Add New Book</h3>
+                                <h3>Шинэ ном нэмэх</h3>
                                 <button type="button" class="close-btn" 
                                     onclick="this.getRootNode().host.handleModalClose()">×</button>
                             </div>
                             <div class="form-content">
                                 <div class="form-group">
-                                    <label for="title">Title *</label>
+                                    <label for="title">Гарчиг *</label>
                                     <input type="text" name="title" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="author">Author *</label>
+                                    <label for="author">Зохиолч *</label>
                                     <input type="text" name="author" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Price *</label>
+                                    <label for="price">Үнэ *</label>
                                     <input type="number" name="price" step="0.01" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="category">Category *</label>
+                                    <label for="category">Ангилал *</label>
                                     <select name="category" required>
                                         <option value="fiction">Fiction</option>
                                         <option value="non-fiction">Non-Fiction</option>
@@ -352,23 +352,23 @@ class BookManager extends HTMLElement {
                                     <input type="text" name="isbn" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="publish_date">Publish Date</label>
+                                    <label for="publish_date">Хэвлэгдсэн огноо</label>
                                     <input type="date" name="publish_date">
                                 </div>
                                 <div class="form-group">
-                                    <label for="publisher">Publisher</label>
+                                    <label for="publisher">Хэвлэх газар</label>
                                     <input type="text" name="publisher">
                                 </div>
                                 <div class="form-group">
-                                    <label for="language">Language</label>
+                                    <label for="language">Хэл</label>
                                     <input type="text" name="language">
                                 </div>
                                 <div class="form-group">
-                                    <label for="pages">Pages</label>
+                                    <label for="pages">Хуудас</label>
                                     <input type="number" name="pages" min="1">
                                 </div>
                                 <div class="form-group">
-                                    <label for="format">Format</label>
+                                    <label for="format">Формат</label>
                                     <select name="format">
                                         <option value="hardcover">Hardcover</option>
                                         <option value="paperback">Paperback</option>
@@ -377,23 +377,23 @@ class BookManager extends HTMLElement {
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description">Description</label>
+                                    <label for="description">Тодорхойлолт</label>
                                     <textarea name="description"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cover_image">Cover Image URL</label>
+                                    <label for="cover_image">Зураг URL</label>
                                     <input type="url" name="cover_image">
                                 </div>
                                 <div class="form-group">
-                                    <label for="rating">Rating (0-5)</label>
+                                    <label for="rating">Үнэлгээ (0-5)</label>
                                     <input type="number" name="rating" min="0" max="5" step="0.1">
                                 </div>
                                 <div class="form-group">
-                                    <label for="reviews">Number of Reviews</label>
+                                    <label for="reviews">Нийт үнэлсэн</label>
                                     <input type="number" name="reviews" min="0">
                                 </div>
                                 <div class="form-group">
-                                    <label for="in_stock">In Stock</label>
+                                    <label for="in_stock">Нөөцөд байгаа эсэх</label>
                                     <select name="in_stock">
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
@@ -401,8 +401,8 @@ class BookManager extends HTMLElement {
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="add-btn">Add Book</button>
-                                <button type="button" onclick="this.getRootNode().host.toggleAddForm()" class="cancel-btn">Cancel</button>
+                                <button type="submit" class="add-btn">Нэмэх</button>
+                                <button type="button" onclick="this.getRootNode().host.toggleAddForm()" class="cancel-btn">Болих</button>
                             </div>
                         </form>
                     </modal-dialog>
@@ -413,13 +413,13 @@ class BookManager extends HTMLElement {
                         <div class="book-item">
                             <div class="book-info">
                                 <h3>${book.title}</h3>
-                                <p>by ${book.author}</p>
+                                <p>${book.author}</p>
                             </div>
-                            <div>$${book.price}</div>
+                            <div>₮${book.price}</div>
                             <div>${book.category}</div>
                             <div class="actions">
-                                <button class="edit-btn" onclick="this.getRootNode().host.editBook(${book.id})">Edit</button>
-                                <button class="delete-btn" onclick="this.getRootNode().host.handleDeleteBook(${book.id})">Delete</button>
+                                <button class="edit-btn" onclick="this.getRootNode().host.editBook(${book.id})">Засах</button>
+                                <button class="delete-btn" onclick="this.getRootNode().host.handleDeleteBook(${book.id})">Устгах</button>
                             </div>
                         </div>
                     `).join('')}

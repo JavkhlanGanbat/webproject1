@@ -32,7 +32,7 @@ class AdminButton extends HTMLElement {
                 }
             </style>
             <button class="admin-button" onclick="this.getRootNode().host.navigateToAdmin()">
-                Admin
+                Админ
             </button>
         `;
     }

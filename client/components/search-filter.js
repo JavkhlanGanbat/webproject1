@@ -131,22 +131,22 @@ class SearchFilter extends HTMLElement {
             </style>
             <div class="controls">
                 <div>
-                    <label for="search">Search Books:</label>
+                    <label for="search">Хайх:</label>
                     <div class="search-group">
                         <input type="text" id="search" 
                                value="${this.dataset.search || ''}" 
-                               placeholder="Search by title or author...">
-                        <button id="searchButton">Search</button>
+                               placeholder="Гарчиг/Зохиолчоор хайх...">
+                        <button id="searchButton">Хайх</button>
                     </div>
                 </div>
                 <div>
-                    <label for="sort">Sort By:</label>
+                    <label for="sort">Эрэмбэлэх:</label>
                     <select id="sort">
                         <option value="price_asc" ${this.dataset.sort === 'price_asc' ? 'selected' : ''}>
-                            Price (Low to High)
+                            Үнэ (Багаас их)
                         </option>
                         <option value="price_desc" ${this.dataset.sort === 'price_desc' ? 'selected' : ''}>
-                            Price (High to Low)
+                            Үнэ (Ихээс бага)
                         </option>
                     </select>
                 </div>
@@ -154,7 +154,7 @@ class SearchFilter extends HTMLElement {
                     <label for="category">Category:</label>
                     <select id="category">
                         <option value="all" ${this.dataset.category === 'all' ? 'selected' : ''}>
-                            All Categories
+                            Бүгд
                         </option>
                         <option value="Fiction" ${this.dataset.category === 'Fiction' ? 'selected' : ''}>
                             Fiction

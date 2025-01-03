@@ -62,7 +62,7 @@ class StoreHeader extends HTMLElement {
                 }
             </style>
             <header>
-                <h1>My Bookstore</h1>
+                <h1>Номын дэлгүүр</h1>
                 <div class="button-container">
                     <admin-button></admin-button>
                     <button id="themeToggle" onclick="this.getRootNode().host.toggleTheme()">

@@ -101,14 +101,14 @@ class ShoppingCart extends HTMLElement {
                 }
             </style>
             <div class="cart">
-                <h2>Shopping Cart</h2>
+                <h2>Сагс</h2>
                 ${this.items.length === 0 ? 
-                    '<p>Your cart is empty</p>' : 
+                    '<p>Таны сагс хоосон байна</p>' : 
                     this.items.map((item, index) => `
                         <div class="cart-item">
                             <span>${item.title}</span>
                             <div class="quantity-controls">
-                                <span>$${(item.price * (item.quantity || 1)).toFixed(2)}</span>
+                                <span>₮${(item.price * (item.quantity || 1)).toFixed(2)}</span>
                                 <span>(${item.quantity || 1}x)</span>
                                 ${item.quantity > 1 ? 
                                     `<button class="decrease-btn" 
@@ -124,7 +124,7 @@ class ShoppingCart extends HTMLElement {
                         </div>
                     `).join('')}
                 <div class="total">
-                    Total: $${total.toFixed(2)}
+                    Нийт үнэ: ₮${total.toFixed(2)}
                 </div>
             </div>
         `;
