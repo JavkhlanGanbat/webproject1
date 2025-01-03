@@ -50,15 +50,13 @@ class BookItem extends HTMLElement {
 
                 .book-image {
                     width: 100%;
-                    aspect-ratio: 3/4;
-                    height: auto;
+                    height: 200px;
                     object-fit: cover;
                     display: block;
                 }
 
                 .book-info {
-                    padding: clamp(0.5rem, 2vw, 1rem);
-                    flex: 1;
+                    padding: 15px;
                     flex-direction: column;
                 }
 
@@ -73,27 +71,27 @@ class BookItem extends HTMLElement {
 
                 h3 {
                     margin: 0 0 8px 0;
-                    font-size: clamp(0.875rem, 1.5vw, 1.1rem);
+                    font-size: 1.1em;
                     color: #333;
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                     line-height: 1.3;
-                    max-height: 2.6em;
+                    height: 2.6em;
                 }
 
                 .author {
                     margin: 4px 0;
                     color: #666;
-                    font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+                    font-size: 0.9em;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
 
                 .price {
-                    font-size: clamp(1rem, 2vw, 1.2rem);
+                    font-size: 1.2em;
                     color: #2c3e50;
                     font-weight: bold;
                     margin: 8px 0;
