@@ -3,7 +3,7 @@ import { pool } from '../db.js';
 
 const router = express.Router();
 
-router.get('/api/books', async (req, res) => {
+router.get('/books', async (req, res) => {
     try {
         const { page = 1, limit = 10, search = '', category = 'all', sort = 'price_asc' } = req.query;
         
@@ -74,7 +74,7 @@ router.get('/api/books', async (req, res) => {
     }
 });
 
-router.get('/api/books/:id', async (req, res) => {
+router.get('/books/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const query = 'SELECT * FROM books WHERE id = $1';
@@ -87,6 +87,84 @@ router.get('/api/books/:id', async (req, res) => {
         
         res.json(rows[0]);
     } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/books', async (req, res) => {
+    try {
+        console.log('Received book data:', req.body); // Add logging
+        const book = req.body;
+        const query = `
+            INSERT INTO books (
+                title, author, price, category, isbn, publish_date, 
+                publisher, language, pages, format, description, 
+                cover_image, rating, reviews, in_stock
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+            RETURNING *
+        `;
+        const values = [
+            book.title, book.author, book.price, book.category, 
+            book.isbn, book.publish_date, book.publisher, book.language,
+            book.pages, book.format, book.description, book.cover_image,
+            book.rating, book.reviews, book.in_stock
+        ];
+        
+        const { rows } = await pool.query(query, values);
+        res.status(201).json(rows[0]);
+    } catch (err) {
+        console.error('Error adding book:', err);
+        res.status(500).json({ 
+            error: err.message,
+            details: err.stack // Add stack trace for debugging
+        });
+    }
+});
+
+router.put('/books/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const book = req.body;
+        const query = `
+            UPDATE books 
+            SET title = $1, author = $2, price = $3, category = $4,
+                isbn = $5, publish_date = $6, publisher = $7, 
+                language = $8, pages = $9, format = $10,
+                description = $11, cover_image = $12, rating = $13,
+                reviews = $14, in_stock = $15
+            WHERE id = $16
+            RETURNING *
+        `;
+        const values = [
+            book.title, book.author, book.price, book.category,
+            book.isbn, book.publish_date, book.publisher, book.language,
+            book.pages, book.format, book.description, book.cover_image,
+            book.rating, book.reviews, book.in_stock, id
+        ];
+        
+        const { rows } = await pool.query(query, values);
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        res.json(rows[0]);
+    } catch (err) {
+        console.error('Error updating book:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.delete('/books/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const query = 'DELETE FROM books WHERE id = $1 RETURNING *';
+        const { rows } = await pool.query(query, [id]);
+        
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        res.json({ message: 'Book deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting book:', err);
         res.status(500).json({ error: err.message });
     }
 });

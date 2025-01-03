@@ -38,4 +38,57 @@ export class BookService {
             return null;
         }
     }
+
+    static async addBook(bookData) {
+        try {
+            console.log('Sending book data:', bookData); // Add logging
+            const response = await fetch('/api/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bookData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to add book');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error adding book:', error);
+            throw error;
+        }
+    }
+
+    static async updateBook(id, bookData) {
+        try {
+            const response = await fetch(`/api/books/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bookData)
+            });
+            if (!response.ok) throw new Error('Failed to update book');
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating book:', error);
+            throw error;
+        }
+    }
+
+    static async deleteBook(id) {
+        try {
+            const response = await fetch(`/api/books/${id}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) throw new Error('Failed to delete book');
+            return await response.json();
+        } catch (error) {
+            console.error('Error deleting book:', error);
+            throw error;
+        }
+    }
 }
