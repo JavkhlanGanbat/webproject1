@@ -55,12 +55,20 @@ class StoreHeader extends HTMLElement {
                 #themeToggle:hover {
                     transform: scale(1.1);
                 }
+                .button-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
             </style>
             <header>
                 <h1>My Bookstore</h1>
-                <button id="themeToggle" onclick="this.getRootNode().host.toggleTheme()">
-                    🌙
-                </button>
+                <div class="button-container">
+                    <admin-button></admin-button>
+                    <button id="themeToggle" onclick="this.getRootNode().host.toggleTheme()">
+                        🌙
+                    </button>
+                </div>
             </header>
         `;
     }
