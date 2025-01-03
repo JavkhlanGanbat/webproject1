@@ -10,6 +10,6 @@ const __dirname = dirname(__filename);
 const projectRoot = path.join(__dirname, '../..');
 
 export const config = {
-    port: process.env.PORT,
+    port: process.env.PORT || 3000,
     projectRoot: projectRoot
 };
