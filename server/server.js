@@ -1,29 +1,9 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import { booksRouter } from './routes/books.js';
+import { createApp } from './app.js';
+import { config } from './config/config.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const projectRoot = path.join(__dirname, '..');
+const app = createApp();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Serve static files from project root
-app.use(express.static(projectRoot));
-app.use(express.json());
-
-// Use books router
-app.use(booksRouter);
-
-// Serve index.html for all routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(projectRoot, 'index.html'));
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`http://localhost:${PORT}`);
+app.listen(config.port, () => {
+    console.log(`Server running on port ${config.port}`);
+    console.log(`http://localhost:${config.port}`);
 });
