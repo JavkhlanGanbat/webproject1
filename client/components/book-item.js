@@ -37,7 +37,8 @@ class BookItem extends HTMLElement {
                     overflow: hidden;
                     background: white;
                     transition: transform 0.2s, box-shadow 0.2s;
-                    height: 420px;
+                    height: min(420px, 90vh);
+                    min-height: fit-content;
                     display: flex;
                     flex-direction: column;
                 }
@@ -49,13 +50,15 @@ class BookItem extends HTMLElement {
 
                 .book-image {
                     width: 100%;
-                    height: 200px;
+                    aspect-ratio: 3/4;
+                    height: auto;
                     object-fit: cover;
                     display: block;
                 }
 
                 .book-info {
-                    padding: 15px;
+                    padding: clamp(0.5rem, 2vw, 1rem);
+                    flex: 1;
                     flex-direction: column;
                 }
 
@@ -70,27 +73,27 @@ class BookItem extends HTMLElement {
 
                 h3 {
                     margin: 0 0 8px 0;
-                    font-size: 1.1em;
+                    font-size: clamp(0.875rem, 1.5vw, 1.1rem);
                     color: #333;
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                     line-height: 1.3;
-                    height: 2.6em;
+                    max-height: 2.6em;
                 }
 
                 .author {
                     margin: 4px 0;
                     color: #666;
-                    font-size: 0.9em;
+                    font-size: clamp(0.75rem, 1.2vw, 0.9rem);
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
 
                 .price {
-                    font-size: 1.2em;
+                    font-size: clamp(1rem, 2vw, 1.2rem);
                     color: #2c3e50;
                     font-weight: bold;
                     margin: 8px 0;

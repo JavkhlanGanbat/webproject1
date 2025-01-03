@@ -55,13 +55,9 @@ class BookDetail extends HTMLElement {
                 }
                 .detail-container {
                     display: grid;
-                    grid-template-columns: minmax(400px, 1fr) 2fr;
-                    background: var(--card-bg);
-                    border-radius: 12px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                    padding: 40px;
-                    justify-content: center;
-                    gap: 60px;
+                    grid-template-columns: minmax(min(400px, 100%), 1fr) 2fr;
+                    padding: clamp(1rem, 5vw, 2.5rem);
+                    gap: clamp(1rem, 3vw, 3.75rem);
                 }
                 .image-section {
                     top: 40px;
@@ -72,6 +68,7 @@ class BookDetail extends HTMLElement {
                     width: 100%;
                     height: auto;
                     max-height: 80vh;
+                    aspect-ratio: 3/4;
                     object-fit: contain;
                     border-radius: 8px;
                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -79,7 +76,7 @@ class BookDetail extends HTMLElement {
 
                 .info-section {
                     color: var(--text-color);
-                    padding-right: 40px;
+                    padding-right: clamp(1rem, 3vw, 2.5rem);
                 }
 
                 .book-category {
@@ -93,27 +90,27 @@ class BookDetail extends HTMLElement {
                 }
 
                 .book-title {
-                    font-size: 2.5em;
+                    font-size: clamp(1.5rem, 4vw, 2.5rem);
                     margin: 0 0 10px 0;
                     color: var(--text-color);
                     line-height: 1.2;
                 }
 
                 .book-author {
-                    font-size: 1.4em;
+                    font-size: clamp(1rem, 2vw, 1.4rem);
                     color: var(--secondary-color);
                     margin-bottom: 30px;
                 }
 
                 .book-price {
-                    font-size: 2em;
+                    font-size: clamp(1.5rem, 3vw, 2rem);
                     color: var(--primary-color);
                     font-weight: bold;
                     margin: 30px 0;
                 }
 
                 .book-description {
-                    font-size: 1.1em;
+                    font-size: clamp(0.875rem, 1.5vw, 1.1rem);
                     line-height: 1.8;
                     margin: 30px 0;
                     color: var(--text-color);
@@ -122,10 +119,10 @@ class BookDetail extends HTMLElement {
                 .details-grid {
                     display: grid;
                     grid-template-columns: repeat(2, 1fr);
-                    gap: 20px;
+                    gap: clamp(0.5rem, 2vw, 1.25rem);
                     margin: 30px 0;
                     background: var(--bg-color);
-                    padding: 20px;
+                    padding: clamp(0.75rem, 2vw, 1.25rem);
                     border-radius: 8px;
                     border: 1px solid var(--border-color);
                 }
@@ -254,13 +251,9 @@ class BookDetail extends HTMLElement {
                 }
                 .detail-container {
                     display: grid;
-                    grid-template-columns: minmax(400px, 1fr) 2fr;
-                    background: var(--card-bg);
-                    border-radius: 12px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                    padding: 40px;
-                    justify-content: center;
-                    gap: 60px;
+                    grid-template-columns: minmax(min(400px, 100%), 1fr) 2fr;
+                    padding: clamp(1rem, 5vw, 2.5rem);
+                    gap: clamp(1rem, 3vw, 3.75rem);
                 }
                 .image-section {
                     top: 40px;
@@ -278,7 +271,7 @@ class BookDetail extends HTMLElement {
 
                 .info-section {
                     color: var(--text-color);
-                    padding-right: 40px;
+                    padding-right: clamp(1rem, 3vw, 2.5rem);
                 }
 
                 .book-category {
@@ -292,27 +285,27 @@ class BookDetail extends HTMLElement {
                 }
 
                 .book-title {
-                    font-size: 2.5em;
+                    font-size: clamp(1.5rem, 4vw, 2.5rem);
                     margin: 0 0 10px 0;
                     color: var(--text-color);
                     line-height: 1.2;
                 }
 
                 .book-author {
-                    font-size: 1.4em;
+                    font-size: clamp(1rem, 2vw, 1.4rem);
                     color: var(--secondary-color);
                     margin-bottom: 30px;
                 }
 
                 .book-price {
-                    font-size: 2em;
+                    font-size: clamp(1.5rem, 3vw, 2rem);
                     color: var(--primary-color);
                     font-weight: bold;
                     margin: 30px 0;
                 }
 
                 .book-description {
-                    font-size: 1.1em;
+                    font-size: clamp(0.875rem, 1.5vw, 1.1rem);
                     line-height: 1.8;
                     margin: 30px 0;
                     color: var(--text-color);
@@ -321,10 +314,10 @@ class BookDetail extends HTMLElement {
                 .details-grid {
                     display: grid;
                     grid-template-columns: repeat(2, 1fr);
-                    gap: 20px;
+                    gap: clamp(0.5rem, 2vw, 1.25rem);
                     margin: 30px 0;
                     background: var(--bg-color);
-                    padding: 20px;
+                    padding: clamp(0.75rem, 2vw, 1.25rem);
                     border-radius: 8px;
                     border: 1px solid var(--border-color);
                 }
