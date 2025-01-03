@@ -19,6 +19,10 @@
     --filter-bg: #2c2c2c;
 }
 
+*{
+    font-family: 'Merriweather', sans-serif;
+}
+
 body {
     margin: 0;
     padding: 0;
