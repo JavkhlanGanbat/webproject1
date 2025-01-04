@@ -1,40 +1,48 @@
-
 import { pool } from '../db.js';
 
 /**
  * @openapi
  * /books:
  *   get:
- *     summary: Get a list of books
+ *     tags: [Books]
+ *     summary: Retrieve a list of books
+ *     description: Retrieve a paginated list of books with optional filtering and sorting
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Page number
+ *           minimum: 1
+ *           default: 1
+ *         description: The page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         description: Number of items per page
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: The number of items per page
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
- *         description: Search term
+ *         description: Search term for filtering books by title, author, or description
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
- *         description: Book category
+ *           enum: [all, fiction, non-fiction, science, history, technology]
+ *         description: Filter books by category
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *         description: Sort order
+ *           enum: [price_asc, price_desc]
+ *         description: Sort books by price
  *     responses:
  *       200:
- *         description: A list of books
+ *         description: Successfully retrieved list of books
  *         content:
  *           application/json:
  *             schema:
@@ -43,15 +51,31 @@ import { pool } from '../db.js';
  *                 books:
  *                   type: array
  *                   items:
- *                     type: object
+ *                     $ref: '#/components/schemas/Book'
  *                 total:
  *                   type: integer
+ *                   description: Total number of books matching the criteria
  *                 totalPages:
  *                   type: integer
+ *                   description: Total number of pages
  *                 currentPage:
  *                   type: integer
+ *                   description: Current page number
  *                 filters:
  *                   type: object
+ *                   properties:
+ *                     search:
+ *                       type: string
+ *                     category:
+ *                       type: string
+ *                     sort:
+ *                       type: string
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function getAllBooks(req, res) {
     try {
@@ -128,23 +152,31 @@ export async function getAllBooks(req, res) {
  * @openapi
  * /books/{id}:
  *   get:
- *     summary: Get a single book by ID
+ *     tags: [Books]
+ *     summary: Get a book by ID
+ *     description: Retrieve detailed information about a specific book
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: integer
  *         description: The book ID
  *     responses:
  *       200:
- *         description: A single book
+ *         description: Book details retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               $ref: '#/components/schemas/Book'
  *       404:
- *         description: Book not found
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function getBookById(req, res) {
     try {
@@ -166,22 +198,34 @@ export async function getBookById(req, res) {
  * @openapi
  * /books:
  *   post:
- *     summary: Add a new book
+ *     tags: [Books]
+ *     summary: Create a new book
+ *     description: Add a new book to the database
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/Book'
  *     responses:
  *       201:
- *         description: Book created
+ *         description: Book created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               $ref: '#/components/schemas/Book'
+ *       400:
+ *         description: Invalid input
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Internal server error
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function createBook(req, res) {
     try {
@@ -217,14 +261,16 @@ export async function createBook(req, res) {
  * @openapi
  * /books/{id}:
  *   delete:
- *     summary: Delete a book by ID
+ *     tags: [Books]
+ *     summary: Delete a book
+ *     description: Delete a book from the database
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
- *           type: string
- *         description: The book ID
+ *           type: integer
+ *         description: The book ID to delete
  *     responses:
  *       200:
  *         description: Book deleted successfully
@@ -232,10 +278,17 @@ export async function createBook(req, res) {
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  *       404:
- *         description: Book not found
+ *         $ref: '#/components/responses/NotFound'
  *       500:
- *         description: Internal server error
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function deleteBook(req, res) {
     try {

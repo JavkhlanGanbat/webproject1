@@ -1,15 +1,16 @@
 import express from 'express';
 import { booksRouter } from './routes/books.js';
 import { setupStaticMiddleware, setupDefaultRoute } from './middleware/static.js';
+import { swaggerDocs, swaggerUi } from './docs/swaggerDocs.js';
 
 export const createApp = () => {
     const app = express();
 
-    // Setup middleware
-    app.use(express.json());  // This MUST come before route handlers
+    // Basic middleware
+    app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     
-    // Add CORS headers if needed
+    // CORS headers
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -17,12 +18,12 @@ export const createApp = () => {
         next();
     });
 
+    // API and Documentation routes BEFORE static middleware
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use('/api', booksRouter);
+
+    // Static and catch-all routes LAST
     setupStaticMiddleware(app);
-
-    // Setup API routes
-    app.use('/api', booksRouter);  // Add /api prefix here
-
-    // Setup default route (should be last)
     setupDefaultRoute(app);
 
     return app;
