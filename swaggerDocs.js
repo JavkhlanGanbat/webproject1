@@ -120,6 +120,21 @@ const swaggerOptions = {
                         error: 'Resource not found'
                     }
                 }
+            },
+            responses: {
+                NotFound: {
+                    description: 'The specified resource was not found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                $ref: '#/components/schemas/Error'
+                            },
+                            example: {
+                                error: 'Resource not found'
+                            }
+                        }
+                    }
+                }
             }
         }
     },

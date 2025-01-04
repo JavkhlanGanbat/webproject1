@@ -188,7 +188,11 @@ export async function getAllBooks(req, res) {
  *             schema:
  *               $ref: '#/components/schemas/Book'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       500:
  *         description: Server error
  *         content:
@@ -236,7 +240,11 @@ export async function getBookById(req, res) {
  *                 message:
  *                   type: string
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       500:
  *         description: Server error
  *         content:
