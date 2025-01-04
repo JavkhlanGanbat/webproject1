@@ -17,6 +17,9 @@ export class BookService {
     static async updateBook(id, bookData) {
         return this._fetch(`/api/books/${id}`, null, {
             method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(bookData)
         });
     }

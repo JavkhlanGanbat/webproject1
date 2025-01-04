@@ -339,3 +339,94 @@ export async function deleteBook(req, res) {
         res.status(500).json({ error: err.message });
     }
 }
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   put:
+ *     tags: [Books]
+ *     summary: Update a book
+ *     description: Update an existing book's information
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The book ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/BookUpdate'
+ *     responses:
+ *       200:
+ *         $ref: '#/components/responses/Updated'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+export async function updateBook(req, res) {
+    try {
+        const { id } = req.params;
+        const book = req.body;
+        
+        const query = `
+            UPDATE books 
+            SET 
+                title = $1, 
+                author = $2, 
+                price = $3, 
+                category = $4,
+                isbn = $5,
+                publish_date = $6,
+                publisher = $7,
+                language = $8,
+                pages = $9,
+                format = $10,
+                description = $11,
+                cover_image = $12,
+                rating = $13,
+                reviews = $14,
+                in_stock = $15
+            WHERE id = $16
+            RETURNING *
+        `;
+        
+        const values = [
+            book.title,
+            book.author,
+            book.price,
+            book.category,
+            book.isbn,
+            book.publish_date,
+            book.publisher,
+            book.language,
+            book.pages,
+            book.format,
+            book.description,
+            book.cover_image,
+            book.rating,
+            book.reviews,
+            book.in_stock,
+            id
+        ];
+
+        const { rows } = await pool.query(query, values);
+        
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        
+        res.json(rows[0]);
+    } catch (err) {
+        console.error('Error updating book:', err);
+        res.status(500).json({ error: err.message });
+    }
+}

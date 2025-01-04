@@ -7,7 +7,8 @@ class BookManager extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.state = {
             books: [],
-            showAddForm: false,
+            showForm: false,
+            editingBook: null, // New state for tracking editing book
             error: null
         };
         this.handleModalClose = this.handleModalClose.bind(this);
@@ -29,9 +30,16 @@ class BookManager extends HTMLElement {
         await this.fetchBooks();
     }
 
-    async editBook(book) {
-        // Implement edit book logic
-        await this.fetchBooks();
+    async editBook(bookId) {
+        try {
+            const book = await BookService.getBookById(bookId);
+            this.state.editingBook = book;
+            this.state.showForm = true;
+            this.render();
+        } catch (error) {
+            this.state.error = `Error loading book: ${error.message}`;
+            this.render();
+        }
     }
 
     async deleteBook(bookId) {
@@ -39,12 +47,15 @@ class BookManager extends HTMLElement {
         await this.fetchBooks();
     }
 
-    toggleAddForm() {
-        this.state.showAddForm = !this.state.showAddForm;
+    toggleForm() {
+        this.state.showForm = !this.state.showForm;
+        if (!this.state.showForm) {
+            this.state.editingBook = null;
+        }
         this.render();
     }
 
-    async handleAddBook(event) {
+    async handleFormSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         
@@ -67,14 +78,23 @@ class BookManager extends HTMLElement {
                 in_stock: formData.get('in_stock') === 'true'
             };
 
-            await BookService.addBook(bookData);
-            this.state.showAddForm = false;
+            if (this.state.editingBook) {
+                await BookService.updateBook(this.state.editingBook.id, bookData);
+                console.log('Book updated successfully');
+            } else {
+                await BookService.addBook(bookData);
+                console.log('Book added successfully');
+            }
+
+            this.state.showForm = false;
+            this.state.editingBook = null;
             this.state.error = null;
             await this.fetchBooks();
         } catch (error) {
+            console.error('Form submission error:', error);
             this.state.error = error.message;
-            this.render();
         }
+        this.render();
     }
 
     async handleDeleteBook(bookId) {
@@ -92,7 +112,8 @@ class BookManager extends HTMLElement {
     }
 
     handleModalClose() {
-        this.state.showAddForm = false;
+        this.state.showForm = false;
+        this.state.editingBook = null;
         this.render();
     }
 
@@ -223,6 +244,11 @@ class BookManager extends HTMLElement {
                 .cancel-btn {
                     background: #ffc107;
                     color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 1rem;
                 }
                 .cancel-btn:hover {
                     background: #e0a800;
@@ -317,7 +343,7 @@ class BookManager extends HTMLElement {
             </style>
             <div class="book-manager">
                 <h2>Админ хуудас</h2>
-                <button class="add-btn" onclick="this.getRootNode().host.toggleAddForm()">
+                <button class="add-btn" onclick="this.getRootNode().host.toggleForm()">
                     Ном нэмэх
                 </button>
                 
@@ -325,92 +351,108 @@ class BookManager extends HTMLElement {
                     <div class="error">${this.state.error}</div>
                 ` : ''}
 
-                ${this.state.showAddForm ? `
+                ${this.state.showForm ? `
                     <modal-dialog>
-                        <form class="add-form" onsubmit="this.getRootNode().host.handleAddBook(event)">
+                        <form class="add-form" onsubmit="this.getRootNode().host.handleFormSubmit(event)">
                             <div class="form-header">
-                                <h3>Шинэ ном нэмэх</h3>
+                                <h3>${this.state.editingBook ? 'Ном засах' : 'Шинэ ном нэмэх'}</h3>
                                 <button type="button" class="close-btn" 
                                     onclick="this.getRootNode().host.handleModalClose()">×</button>
                             </div>
                             <div class="form-content">
                                 <div class="form-group">
                                     <label for="title">Гарчиг *</label>
-                                    <input type="text" name="title" required>
+                                    <input type="text" name="title" required 
+                                        value="${this.state.editingBook?.title || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="author">Зохиолч *</label>
-                                    <input type="text" name="author" required>
+                                    <input type="text" name="author" required 
+                                        value="${this.state.editingBook?.author || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Үнэ *</label>
-                                    <input type="number" name="price" step="0.01" required>
+                                    <input type="number" name="price" step="0.01" required 
+                                        value="${this.state.editingBook?.price || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="category">Ангилал *</label>
                                     <select name="category" required>
-                                        <option value="fiction">Fiction</option>
-                                        <option value="non-fiction">Non-Fiction</option>
-                                        <option value="science">Science</option>
-                                        <option value="technology">Technology</option>
+                                        ${['fiction', 'non-fiction', 'science', 'technology']
+                                            .map(cat => `<option value="${cat}" 
+                                                ${this.state.editingBook?.category === cat ? 'selected' : ''}>
+                                                ${cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                            </option>`).join('')}
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="isbn">ISBN *</label>
-                                    <input type="text" name="isbn" required>
+                                    <input type="text" name="isbn" required 
+                                        value="${this.state.editingBook?.isbn || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="publish_date">Хэвлэгдсэн огноо</label>
-                                    <input type="date" name="publish_date">
+                                    <input type="date" name="publish_date" 
+                                        value="${this.state.editingBook?.publish_date || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="publisher">Хэвлэх газар</label>
-                                    <input type="text" name="publisher">
+                                    <input type="text" name="publisher" 
+                                        value="${this.state.editingBook?.publisher || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="language">Хэл</label>
-                                    <input type="text" name="language">
+                                    <input type="text" name="language" 
+                                        value="${this.state.editingBook?.language || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="pages">Хуудас</label>
-                                    <input type="number" name="pages" min="1">
+                                    <input type="number" name="pages" min="1" 
+                                        value="${this.state.editingBook?.pages || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="format">Формат</label>
                                     <select name="format">
-                                        <option value="hardcover">Hardcover</option>
-                                        <option value="paperback">Paperback</option>
-                                        <option value="ebook">E-Book</option>
-                                        <option value="audiobook">Audiobook</option>
+                                        ${['hardcover', 'paperback', 'ebook', 'audiobook']
+                                            .map(format => `<option value="${format}" 
+                                                ${this.state.editingBook?.format === format ? 'selected' : ''}>
+                                                ${format.charAt(0).toUpperCase() + format.slice(1)}
+                                            </option>`).join('')}
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Тодорхойлолт</label>
-                                    <textarea name="description"></textarea>
+                                    <textarea name="description">${this.state.editingBook?.description || ''}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="cover_image">Зураг URL</label>
-                                    <input type="url" name="cover_image">
+                                    <input type="url" name="cover_image" 
+                                        value="${this.state.editingBook?.cover_image || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="rating">Үнэлгээ (0-5)</label>
-                                    <input type="number" name="rating" min="0" max="5" step="0.1">
+                                    <input type="number" name="rating" min="0" max="5" step="0.1" 
+                                        value="${this.state.editingBook?.rating || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="reviews">Нийт үнэлсэн</label>
-                                    <input type="number" name="reviews" min="0">
+                                    <input type="number" name="reviews" min="0" 
+                                        value="${this.state.editingBook?.reviews || ''}">
                                 </div>
                                 <div class="form-group">
                                     <label for="in_stock">Нөөцөд байгаа эсэх</label>
                                     <select name="in_stock">
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                        <option value="true" ${this.state.editingBook?.in_stock === true ? 'selected' : ''}>Yes</option>
+                                        <option value="false" ${this.state.editingBook?.in_stock === false ? 'selected' : ''}>No</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="add-btn">Нэмэх</button>
-                                <button type="button" onclick="this.getRootNode().host.toggleAddForm()" class="cancel-btn">Болих</button>
+                                <button type="submit" class="add-btn">
+                                    ${this.state.editingBook ? 'Хадгалах' : 'Нэмэх'}
+                                </button>
+                                <button type="button" onclick="this.getRootNode().host.toggleForm()" 
+                                    class="cancel-btn">Болих</button>
                             </div>
                         </form>
                     </modal-dialog>
@@ -426,8 +468,14 @@ class BookManager extends HTMLElement {
                             <div>₮${book.price}</div>
                             <div>${book.category}</div>
                             <div class="actions">
-                                <button class="edit-btn" onclick="this.getRootNode().host.editBook(${book.id})">Засах</button>
-                                <button class="delete-btn" onclick="this.getRootNode().host.handleDeleteBook(${book.id})">Устгах</button>
+                                <button class="edit-btn" 
+                                    onclick="this.getRootNode().host.editBook(${book.id})">
+                                    Засах
+                                </button>
+                                <button class="delete-btn" 
+                                    onclick="this.getRootNode().host.handleDeleteBook(${book.id})">
+                                    Устгах
+                                </button>
                             </div>
                         </div>
                     `).join('')}

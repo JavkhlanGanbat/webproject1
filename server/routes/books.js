@@ -1,20 +1,21 @@
 import express from 'express';
-import { pool } from '../db.js';
-import {
-    getAllBooks,
-    getBookById,
-    createBook,
-    deleteBook
+import { 
+    getAllBooks, 
+    getBookById, 
+    createBook, 
+    updateBook, 
+    deleteBook 
 } from '../controllers/booksController.js';
 
 const router = express.Router();
 
-router.get('/books', getAllBooks);
+// Define route prefix
+const BASE_PATH = '/books';
 
-router.get('/books/:id', getBookById);
-
-router.post('/books', createBook);
-
-router.delete('/books/:id', deleteBook);
+router.get(BASE_PATH, getAllBooks);
+router.get(`${BASE_PATH}/:id`, getBookById);
+router.post(BASE_PATH, createBook);
+router.put(`${BASE_PATH}/:id`, updateBook);
+router.delete(`${BASE_PATH}/:id`, deleteBook);
 
 export const booksRouter = router;
