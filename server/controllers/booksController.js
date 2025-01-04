@@ -5,8 +5,8 @@ import { pool } from '../db.js';
  * /books:
  *   get:
  *     tags: [Books]
- *     summary: Retrieve a list of books
- *     description: Retrieve a paginated list of books with optional filtering and sorting
+ *     summary: Номын жагсаалтыг авах
+ *     description: Номын жагсаалтыг хуудаслаж, шүүлтүүр болон эрэмбэлэх боломжтой
  *     parameters:
  *       - in: query
  *         name: page
@@ -14,7 +14,7 @@ import { pool } from '../db.js';
  *           type: integer
  *           minimum: 1
  *           default: 1
- *         description: The page number for pagination
+ *         description: Хуудасны дугаар
  *       - in: query
  *         name: limit
  *         schema:
@@ -22,27 +22,27 @@ import { pool } from '../db.js';
  *           minimum: 1
  *           maximum: 100
  *           default: 10
- *         description: The number of items per page
+ *         description: Хуудас бүрт харуулах зүйлсийн тоо
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
- *         description: Search term for filtering books by title, author, or description
+ *         description: Номын гарчиг, зохиолч эсвэл тайлбараар шүүх хайлтын үг
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
  *           enum: [all, fiction, non-fiction, science, history, technology]
- *         description: Filter books by category
+ *         description: Ангиллаар шүүх
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
  *           enum: [price_asc, price_desc]
- *         description: Sort books by price
+ *         description: Үнээр эрэмбэлэх
  *     responses:
  *       200:
- *         description: Successfully retrieved list of books
+ *         description: Номын жагсаалтыг амжилттай авлаа
  *         content:
  *           application/json:
  *             schema:
@@ -54,13 +54,13 @@ import { pool } from '../db.js';
  *                     $ref: '#/components/schemas/Book'
  *                 total:
  *                   type: integer
- *                   description: Total number of books matching the criteria
+ *                   description: Шүүлтүүрт тохирсон нийт номын тоо
  *                 totalPages:
  *                   type: integer
- *                   description: Total number of pages
+ *                   description: Нийт хуудасны тоо
  *                 currentPage:
  *                   type: integer
- *                   description: Current page number
+ *                   description: Одоогийн хуудасны дугаар
  *                 filters:
  *                   type: object
  *                   properties:
@@ -77,7 +77,7 @@ import { pool } from '../db.js';
  *                   title: "The Great Gatsby",
  *                   author: "F. Scott Fitzgerald",
  *                   price: 9.99,
- *                   category: "fiction"
+ *                   category: "Fiction"
  *                 }
  *               ]
  *               total: 1
@@ -89,7 +89,7 @@ import { pool } from '../db.js';
  *                 sort: "price_asc"
  *               }
  *       500:
- *         description: Server error
+ *         description: Серверийн алдаа
  *         content:
  *           application/json:
  *             schema:
@@ -171,30 +171,30 @@ export async function getAllBooks(req, res) {
  * /books/{id}:
  *   get:
  *     tags: [Books]
- *     summary: Get a book by ID
- *     description: Retrieve detailed information about a specific book
+ *     summary: Номын ID-аар авах
+ *     description: Тодорхой номын дэлгэрэнгүй мэдээллийг авах
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: The book ID
+ *         description: Номын ID
  *     responses:
  *       200:
- *         description: Book details retrieved successfully
+ *         description: Номын дэлгэрэнгүй мэдээллийг амжилттай авлаа
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Book'
  *       404:
- *         description: Book not found
+ *         description: Ном олдсонгүй
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Server error
+ *         description: Серверийн алдаа
  *         content:
  *           application/json:
  *             schema:
@@ -220,18 +220,18 @@ export async function getBookById(req, res) {
  * /books/{id}:
  *   delete:
  *     tags: [Books]
- *     summary: Delete a book
- *     description: Delete a book from the database
+ *     summary: Ном устгах
+ *     description: Өгөгдлийн сангаас ном устгах
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: The book ID to delete
+ *         description: Устгах номын ID
  *     responses:
  *       200:
- *         description: Book deleted successfully
+ *         description: Ном амжилттай устгагдлаа
  *         content:
  *           application/json:
  *             schema:
@@ -240,13 +240,13 @@ export async function getBookById(req, res) {
  *                 message:
  *                   type: string
  *       404:
- *         description: Book not found
+ *         description: Ном олдсонгүй
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Server error
+ *         description: Серверийн алдаа
  *         content:
  *           application/json:
  *             schema:
@@ -273,15 +273,15 @@ export async function deleteBook(req, res) {
  * /books/{id}:
  *   put:
  *     tags: [Books]
- *     summary: Update a book
- *     description: Update an existing book's information
+ *     summary: Ном шинэчлэх
+ *     description: Одоо байгаа номын мэдээллийг шинэчлэх
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: The book ID
+ *         description: Номын ID
  *     requestBody:
  *       required: true
  *       content:
@@ -290,19 +290,19 @@ export async function deleteBook(req, res) {
  *             $ref: '#/components/schemas/Book'
  *     responses:
  *       200:
- *         description: Book updated successfully
+ *         description: Ном амжилттай шинэчлэгдлээ
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Book'
  *       404:
- *         description: Book not found
+ *         description: Ном олдсонгүй
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Server error
+ *         description: Серверийн алдаа
  *         content:
  *           application/json:
  *             schema:
@@ -371,8 +371,8 @@ export async function updateBook(req, res) {
  * /books:
  *   post:
  *     tags: [Books]
- *     summary: Create a new book
- *     description: Add a new book to the database
+ *     summary: Шинэ ном үүсгэх
+ *     description: Өгөгдлийн санд шинэ ном нэмэх
  *     requestBody:
  *       required: true
  *       content:
@@ -380,36 +380,36 @@ export async function updateBook(req, res) {
  *           schema:
  *             $ref: '#/components/schemas/Book'
  *           example:
- *             title: "New Book Title"
- *             author: "Author Name"
+ *             title: "Шинэ номын гарчиг"
+ *             author: "Зохиолчийн нэр"
  *             price: 29.99
  *             category: "fiction"
  *             isbn: "978-1234567890"
  *             publish_date: "2023-01-01"
- *             publisher: "Publisher Name"
- *             language: "English"
+ *             publisher: "Хэвлэлийн газар"
+ *             language: "Англи"
  *             pages: 300
- *             format: "Hardcover"
- *             description: "Book description here"
+ *             format: "Хатуу хавтастай"
+ *             description: "Номын тайлбар энд байна"
  *             cover_image: "https://example.com/cover.jpg"
  *             rating: 0
  *             reviews: 0
  *             in_stock: true
  *     responses:
  *       201:
- *         description: Book created successfully
+ *         description: Ном амжилттай үүсгэгдлээ
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Book'
  *       400:
- *         description: Invalid input
+ *         description: Буруу оролт
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Server error
+ *         description: Серверийн алдаа
  *         content:
  *           application/json:
  *             schema:

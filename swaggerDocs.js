@@ -5,14 +5,14 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Books API Documentation',
+            title: 'API баримт',
             version: '1.0.0',
-            description: 'RESTful API for managing books in an online bookstore',
+            description: 'Онлайн номын дэлгүүрийн номын удирдлагын RESTful API',
         },
         servers: [
             {
                 url: 'http://localhost:3000/api',
-                description: 'Development server'
+                description: 'Хөгжүүлэлтийн сервер'
             }
         ],
         components: {
@@ -23,70 +23,70 @@ const swaggerOptions = {
                     properties: {
                         id: {
                             type: 'integer',
-                            description: 'The auto-generated id of the book'
+                            description: 'Номын автоматаар үүсгэгдсэн ID'
                         },
                         title: {
                             type: 'string',
-                            description: 'The title of the book'
+                            description: 'Номын гарчиг'
                         },
                         author: {
                             type: 'string',
-                            description: 'The author of the book'
+                            description: 'Номын зохиолч'
                         },
                         price: {
                             type: 'number',
                             format: 'float',
-                            description: 'The price of the book'
+                            description: 'Номын үнэ'
                         },
                         category: {
                             type: 'string',
-                            description: 'The category/genre of the book'
+                            description: 'Номын ангилал/төрөл'
                         },
                         isbn: {
                             type: 'string',
-                            description: 'ISBN of the book'
+                            description: 'Номын ISBN'
                         },
                         publish_date: {
                             type: 'string',
                             format: 'date',
-                            description: 'Publication date of the book'
+                            description: 'Номын хэвлэгдсэн огноо'
                         },
                         publisher: {
                             type: 'string',
-                            description: 'Publisher of the book'
+                            description: 'Номын хэвлэлийн газар'
                         },
                         language: {
                             type: 'string',
-                            description: 'Language of the book'
+                            description: 'Номын хэл'
                         },
                         pages: {
                             type: 'integer',
-                            description: 'Number of pages in the book'
+                            description: 'Номын хуудасны тоо'
                         },
                         format: {
                             type: 'string',
-                            description: 'Format of the book (e.g., Hardcover, Paperback)'
+                            description: 'Номын формат (жишээ нь, Хатуу хавтастай, Зөөлөн хавтастай)'
                         },
                         description: {
                             type: 'string',
-                            description: 'Description of the book'
+                            description: 'Номын тайлбар'
                         },
                         cover_image: {
                             type: 'string',
-                            description: 'URL to the book cover image'
+                            description: 'Номын хавтасны зургийн URL'
                         },
                         rating: {
                             type: 'number',
                             format: 'float',
-                            description: 'Average rating of the book'
+                            description: 'Номын дундаж үнэлгээ'
                         },
                         reviews: {
                             type: 'integer',
-                            description: 'Number of reviews'
+                            description: 'Үнэлгээний тоо'
                         },
                         in_stock: {
                             type: 'boolean',
-                            description: 'Whether the book is in stock'
+                            description: 'Номын нөөцөд байгаа эсэх'
                         }
                     },
                     example: {
@@ -101,7 +101,7 @@ const swaggerOptions = {
                         language: 'English',
                         pages: 180,
                         format: 'Paperback',
-                        description: 'The Great Gatsby is a novel by F. Scott Fitzgerald...',
+                        description: 'The Great Gatsby, F. Scott Fitzgeralds third book',
                         cover_image: 'https://example.com/images/great-gatsby.jpg',
                         rating: 4.5,
                         reviews: 2584,
@@ -113,24 +113,24 @@ const swaggerOptions = {
                     properties: {
                         error: {
                             type: 'string',
-                            description: 'Error message'
+                            description: 'Алдааны мессеж'
                         }
                     },
                     example: {
-                        error: 'Resource not found'
+                        error: 'Нөөц олдсонгүй'
                     }
                 }
             },
             responses: {
                 NotFound: {
-                    description: 'The specified resource was not found',
+                    description: 'Тодорхойлсон нөөц олдсонгүй',
                     content: {
                         'application/json': {
                             schema: {
                                 $ref: '#/components/schemas/Error'
                             },
                             example: {
-                                error: 'Resource not found'
+                                error: 'Нөөц олдсонгүй'
                             }
                         }
                     }
@@ -147,7 +147,7 @@ export const swaggerDocs = swaggerJsDoc(swaggerOptions);
 export const swaggerUiOptions = {
     explorer: true,
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: "Books API Documentation",
+    customSiteTitle: "Номын API баримт бичиг",
     customfavIcon: "/favicon.ico",
     swaggerOptions: {
         displayRequestDuration: true,
