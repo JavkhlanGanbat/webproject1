@@ -1,4 +1,4 @@
-import { BookService } from '../js/BookService.js';
+import { BookService } from '../js/bookService.js';
 import './modal-dialog.js';
 
 class BookManager extends HTMLElement {
@@ -103,12 +103,14 @@ class BookManager extends HTMLElement {
                     padding: 20px;
                     max-width: 1200px;
                     margin: 0 auto;
+                    color: var(--text-color);
                 }
                 .error {
-                    color: red;
+                    color: #ff3333;
                     padding: 10px;
                     margin: 10px 0;
-                    background: #ffe6e6;
+                    background: var(--card-bg);
+                    border: 1px solid #ff3333;
                     border-radius: 4px;
                 }
                 .book-grid {
@@ -118,10 +120,12 @@ class BookManager extends HTMLElement {
                     margin-top: 20px;
                 }
                 .book-item {
-                    background: white;
+                    background: var(--card-bg);
+                    color: var(--text-color);
                     padding: 12px 16px;
                     border-radius: 6px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    border: 1px solid var(--border-color);
+                    box-shadow: 0 2px 4px var(--book-card-shadow);
                     display: grid;
                     grid-template-columns: minmax(200px, 2fr) minmax(80px, 1fr) minmax(100px, 1fr) 140px;
                     align-items: center;
@@ -129,7 +133,7 @@ class BookManager extends HTMLElement {
                     transition: all 0.2s ease;
                 }
                 .book-item:hover {
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                    box-shadow: 0 4px 8px var(--book-card-shadow);
                     transform: translateY(-1px);
                 }
                 .book-info {
@@ -148,7 +152,7 @@ class BookManager extends HTMLElement {
                 .book-info p {
                     margin: 0;
                     font-size: 0.9rem;
-                    color: #666;
+                    color: var(--text-muted);
                 }
                 .actions {
                     display: flex;
@@ -168,20 +172,20 @@ class BookManager extends HTMLElement {
                     min-width: 60px;
                 }
                 .edit-btn {
-                    background: #e8f4ff;
-                    color: #0066cc;
+                    background: var(--primary-color);
+                    color: white;
+                    opacity: 0.9;
                 }
                 .edit-btn:hover {
-                    background: #0066cc;
-                    color: white;
+                    opacity: 1;
                 }
                 .delete-btn {
-                    background: #ffe8e8;
-                    color: #cc0000;
+                    background: #dc3545;
+                    color: white;
+                    opacity: 0.9;
                 }
                 .delete-btn:hover {
-                    background: #cc0000;
-                    color: white;
+                    opacity: 1;
                 }
                 @media (max-width: 768px) {
                     .book-item {
@@ -208,7 +212,7 @@ class BookManager extends HTMLElement {
                     }
                 }
                 .add-btn {
-                    background: #28a745;
+                    background: var(--secondary-color);
                     color: white;
                     padding: 10px 20px;
                     border: none;
@@ -219,12 +223,6 @@ class BookManager extends HTMLElement {
                 .cancel-btn {
                     background: #ffc107;
                     color: white;
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-size: 1rem;
-                    transition: all 0.2s ease;
                 }
                 .cancel-btn:hover {
                     background: #e0a800;
@@ -239,8 +237,8 @@ class BookManager extends HTMLElement {
                 }
                 .form-header {
                     padding: 20px;
-                    background: white;
-                    border-bottom: 1px solid #eee;
+                    background: var(--card-bg);
+                    border-bottom: 1px solid var(--border-color);
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -248,6 +246,7 @@ class BookManager extends HTMLElement {
                 }
                 .form-content {
                     padding: 20px;
+                    background: var(--card-bg);
                     overflow-y: auto;
                     overflow-x: hidden;
                     flex: 1;
@@ -256,19 +255,19 @@ class BookManager extends HTMLElement {
                     width: 8px;
                 }
                 .form-content::-webkit-scrollbar-track {
-                    background: transparent;
+                    background: var(--bg-color);
                 }
                 .form-content::-webkit-scrollbar-thumb {
-                    background: #ddd;
+                    background: var(--border-color);
                     border-radius: 4px;
                 }
                 .form-content::-webkit-scrollbar-thumb:hover {
-                    background: #bbb;
+                    background: var(--text-muted);
                 }
                 .form-actions {
                     padding: 15px 20px;
-                    background: white;
-                    border-top: 1px solid #eee;
+                    background: var(--card-bg);
+                    border-top: 1px solid var(--border-color);
                     display: flex;
                     gap: 10px;
                     margin: 0;
@@ -284,9 +283,18 @@ class BookManager extends HTMLElement {
                 .form-group input, .form-group select, .form-group textarea {
                     width: 100%;
                     padding: 8px;
-                    border: 1px solid #ddd;
+                    background: var(--bg-color);
+                    color: var(--text-color);
+                    border: 1px solid var(--border-color);
                     border-radius: 4px;
                     box-sizing: border-box;
+                }
+                .form-group input:focus, 
+                .form-group select:focus, 
+                .form-group textarea:focus {
+                    border-color: var(--primary-color);
+                    outline: none;
+                    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
                 }
                 .close-btn {
                     background: transparent;
@@ -300,11 +308,11 @@ class BookManager extends HTMLElement {
                     justify-content: center;
                     cursor: pointer;
                     transition: all 0.2s ease;
-                    color: #666;
+                    color: var(--text-muted);
                 }
                 .close-btn:hover {
-                    background: #f0f0f0;
-                    color: #333;
+                    background: var(--search-bg);
+                    color: var(--text-color);
                 }
             </style>
             <div class="book-manager">
