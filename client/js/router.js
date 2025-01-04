@@ -1,4 +1,4 @@
-import { BookService } from './services/BookService.js';
+import { BookService } from './BookService.js';
 
 export class Router {
     static init() {

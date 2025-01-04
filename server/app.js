@@ -1,7 +1,7 @@
 import express from 'express';
 import { booksRouter } from './routes/books.js';
 import { setupStaticMiddleware, setupDefaultRoute } from './middleware/static.js';
-import { swaggerDocs, swaggerUi } from './docs/swaggerDocs.js';
+import { swaggerDocs, swaggerUi } from '../swaggerDocs.js';
 
 export const createApp = () => {
     const app = express();

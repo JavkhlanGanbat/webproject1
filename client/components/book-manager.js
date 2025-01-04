@@ -1,4 +1,4 @@
-import { BookService } from '../js/services/BookService.js';
+import { BookService } from '../js/BookService.js';
 import './modal-dialog.js';
 
 class BookManager extends HTMLElement {

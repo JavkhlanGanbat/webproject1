@@ -1,6 +1,6 @@
 import { createApp } from './app.js';
 import { config } from './config/config.js';
-import { swaggerDocs, swaggerUi } from './docs/swaggerDocs.js';
+import { swaggerDocs, swaggerUi } from '../swaggerDocs.js';
 
 const app = createApp();
 
