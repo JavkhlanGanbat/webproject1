@@ -93,7 +93,9 @@ class SearchFilter extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 .controls {
-                    background: #f8f9fa;
+                    background: var(--search-bg);
+                    color: var(--text-color);
+                    box-shadow: 0 2px 4px var(--book-card-shadow);
                     padding: 15px;
                     border-radius: 8px;
                     margin-bottom: 20px;
@@ -105,10 +107,16 @@ class SearchFilter extends HTMLElement {
                     gap: 8px;
                 }
                 input, select {
+                    background: var(--card-bg);
+                    color: var(--text-color);
+                    border: 1px solid var(--border-color);
                     padding: 8px;
                     border: 1px solid #ddd;
                     border-radius: 4px;
                     font-size: 1rem;
+                }
+                input::placeholder {
+                    color: var(--text-muted);
                 }
                 #search {
                     flex-grow: 1;
@@ -125,6 +133,7 @@ class SearchFilter extends HTMLElement {
                     background: var(--primary-color-dark, #0056b3);
                 }
                 label {
+                    color: var(--text-color);
                     display: block;
                     margin-bottom: 5px;
                 }

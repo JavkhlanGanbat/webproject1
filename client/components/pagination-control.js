@@ -41,22 +41,27 @@ class PaginationControl extends HTMLElement {
                 }
                 .page-button {
                     padding: 8px 12px;
-                    border: 1px solid #ddd;
-                    background: white;
+                    border: 1px solid var(--border-color);
+                    background: var(--card-bg);
+                    color: var(--text-color);
                     border-radius: 4px;
                     cursor: pointer;
+                    transition: background 0.2s, transform 0.1s;
                 }
                 .page-button:hover {
-                    background: #f0f0f0;
+                    background: var(--cart-hover-bg);
+                    transform: translateY(-1px);
                 }
                 .page-button.active {
-                    background: var(--primary-color, #007bff);
+                    background: var(--primary-color);
                     color: white;
-                    border-color: var(--primary-color, #007bff);
+                    border-color: var(--primary-color);
                 }
                 .page-button:disabled {
-                    background: #eee;
+                    background: var(--filter-bg);
+                    color: var(--text-muted);
                     cursor: not-allowed;
+                    transform: none;
                 }
             </style>
             <div class="pagination">

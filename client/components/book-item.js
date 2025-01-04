@@ -31,11 +31,12 @@ class BookItem extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 .book-card {
-                    border: 1px solid #ddd;
+                    background: var(--book-card-bg);
+                    border: 1px solid var(--border-color);
+                    box-shadow: 0 4px 8px var(--book-card-shadow);
                     margin-bottom: 10px;
                     border-radius: 8px;
                     overflow: hidden;
-                    background: white;
                     transition: transform 0.2s, box-shadow 0.2s;
                     height: min(420px, 90vh);
                     min-height: fit-content;
@@ -56,12 +57,16 @@ class BookItem extends HTMLElement {
                 }
 
                 .book-info {
+                    background: var(--book-card-bg);
+                    color: var(--text-color);
                     padding: 15px;
                     flex-direction: column;
+                    flex: 1;  /* This ensures the background fills the remaining space */
                 }
 
                 .category-tag {
-                    background: #e9ecef;
+                    background: var(--search-bg);
+                    color: var(--text-muted);
                     padding: 4px 8px;
                     border-radius: 4px;
                     font-size: 0.8em;
@@ -72,7 +77,7 @@ class BookItem extends HTMLElement {
                 h3 {
                     margin: 0 0 8px 0;
                     font-size: 1.1em;
-                    color: #333;
+                    color: var(--text-heading);
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
@@ -83,7 +88,7 @@ class BookItem extends HTMLElement {
 
                 .author {
                     margin: 4px 0;
-                    color: #666;
+                    color: var(--text-muted);
                     font-size: 0.9em;
                     white-space: nowrap;
                     overflow: hidden;
@@ -92,7 +97,7 @@ class BookItem extends HTMLElement {
 
                 .price {
                     font-size: 1.2em;
-                    color: #2c3e50;
+                    color: var(--price-color);
                     font-weight: bold;
                     margin: 8px 0;
                 }

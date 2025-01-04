@@ -8,15 +8,35 @@
     --border-color: #ddd;
     --filter-bg: #f8f9fa;
     --cart-bg: #f8f9fa;
+    --header-text: #ffffff;
+    --book-card-bg: #ffffff;
+    --book-card-shadow: rgba(0,0,0,0.1);
+    --cart-item-bg: #ffffff;
+    --cart-hover-bg: #f8f9fa;
+    --search-bg: #f8f9fa;
+    --text-muted: #666666;
+    --text-heading: #333333;
+    --price-color: #2c3e50;
 }
 
 [data-theme="dark"] {
     --primary-color: #3498db;
     --secondary-color: #2980b9;
     --bg-color: #1a1a1a;
+    --text-color: #ffffff;
     --card-bg: #2c2c2c;
     --border-color: #4a4a4a;
     --filter-bg: #2c2c2c;
+    --cart-bg: #2c2c2c;
+    --header-text: #ffffff;
+    --book-card-bg: #2c2c2c;
+    --book-card-shadow: rgba(0,0,0,0.3);
+    --cart-item-bg: #2c2c2c;
+    --cart-hover-bg: #363636;
+    --search-bg: #2c2c2c;
+    --text-muted: #b0b0b0;    /* Lighter gray for better visibility */
+    --text-heading: #ffffff;   /* White for headings */
+    --price-color: #7fbbe3;    /* Lighter blue for price */
 }
 
 *{

@@ -10,11 +10,22 @@ class StoreHeader extends HTMLElement {
     }
 
     setupTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        // Check system preference first
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
         
         const themeToggle = this.shadowRoot.getElementById('themeToggle');
         themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            }
+        });
     }
 
     toggleTheme() {
@@ -33,7 +44,7 @@ class StoreHeader extends HTMLElement {
             <style>
                 header {
                     background: var(--primary-color);
-                    color: white;
+                    color: var(--header-text);
                     padding: 1rem;
                     display: flex;
                     justify-content: space-between;

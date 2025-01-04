@@ -63,19 +63,25 @@ class ShoppingCart extends HTMLElement {
                     width: 100%;
                 }
                 .cart {
-                    background: #f8f9fa;
+                    background: var(--cart-item-bg);
+                    color: var(--text-color);
+                    box-shadow: 0 2px 4px var(--book-card-shadow);
                     padding: 20px;
                     border-radius: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                     width: 100%;
                     box-sizing: border-box;
                 }
                 .cart-item {
+                    background: var(--cart-item-bg);
+                    border-bottom: 1px solid var(--border-color);
+                    color: var(--text-color);
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     padding: 10px;
-                    border-bottom: 1px solid #eee;
+                }
+                .cart-item:hover {
+                    background: var(--cart-hover-bg);
                 }
                 .quantity-controls {
                     display: inline-flex;
