@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { config } from '../config/config.js';
+import { config } from '../config.js';
 
 export const setupStaticMiddleware = (app) => {
     app.use(express.static(config.projectRoot));

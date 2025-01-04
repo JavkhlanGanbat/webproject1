@@ -1,6 +1,5 @@
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { config } from './server/config/config.js';
 
 const swaggerOptions = {
     definition: {
@@ -14,12 +13,6 @@ const swaggerOptions = {
             {
                 url: 'http://localhost:3000/api',
                 description: 'Development server'
-            }
-        ],
-        tags: [
-            {
-                name: 'Books',
-                description: 'API endpoints for book operations'
             }
         ],
         components: {
@@ -115,98 +108,6 @@ const swaggerOptions = {
                         in_stock: true
                     }
                 },
-                BookUpdate: {
-                    type: 'object',
-                    required: ['title', 'author', 'price'],
-                    properties: {
-                        title: {
-                            type: 'string',
-                            description: 'The title of the book'
-                        },
-                        author: {
-                            type: 'string',
-                            description: 'The author of the book'
-                        },
-                        price: {
-                            type: 'number',
-                            format: 'float',
-                            description: 'The price of the book'
-                        },
-                        category: {
-                            type: 'string',
-                            enum: ['fiction', 'non-fiction', 'science', 'technology'],
-                            description: 'The category/genre of the book'
-                        },
-                        isbn: {
-                            type: 'string',
-                            description: 'ISBN of the book'
-                        },
-                        publish_date: {
-                            type: 'string',
-                            format: 'date',
-                            description: 'Publication date of the book'
-                        },
-                        publisher: {
-                            type: 'string',
-                            description: 'Publisher of the book'
-                        },
-                        language: {
-                            type: 'string',
-                            description: 'Language of the book'
-                        },
-                        pages: {
-                            type: 'integer',
-                            description: 'Number of pages in the book'
-                        },
-                        format: {
-                            type: 'string',
-                            enum: ['hardcover', 'paperback', 'ebook', 'audiobook'],
-                            description: 'Format of the book'
-                        },
-                        description: {
-                            type: 'string',
-                            description: 'Description of the book'
-                        },
-                        cover_image: {
-                            type: 'string',
-                            format: 'uri',
-                            description: 'URL to the book cover image'
-                        },
-                        rating: {
-                            type: 'number',
-                            format: 'float',
-                            minimum: 0,
-                            maximum: 5,
-                            description: 'Average rating of the book'
-                        },
-                        reviews: {
-                            type: 'integer',
-                            minimum: 0,
-                            description: 'Number of reviews'
-                        },
-                        in_stock: {
-                            type: 'boolean',
-                            description: 'Whether the book is in stock'
-                        }
-                    },
-                    example: {
-                        title: "Updated Book Title",
-                        author: "Updated Author Name",
-                        price: 19.99,
-                        category: "fiction",
-                        isbn: "978-1234567890",
-                        publish_date: "2023-01-01",
-                        publisher: "Updated Publisher",
-                        language: "English",
-                        pages: 300,
-                        format: "hardcover",
-                        description: "Updated book description",
-                        cover_image: "https://example.com/updated-cover.jpg",
-                        rating: 4.5,
-                        reviews: 100,
-                        in_stock: true
-                    }
-                },
                 Error: {
                     type: 'object',
                     properties: {
@@ -214,28 +115,9 @@ const swaggerOptions = {
                             type: 'string',
                             description: 'Error message'
                         }
-                    }
-                }
-            },
-            responses: {
-                NotFound: {
-                    description: 'The specified resource was not found',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                $ref: '#/components/schemas/Error'
-                            }
-                        }
-                    }
-                },
-                Updated: {
-                    description: 'The resource was updated successfully',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                $ref: '#/components/schemas/Book'
-                            }
-                        }
+                    },
+                    example: {
+                        error: 'Resource not found'
                     }
                 }
             }
