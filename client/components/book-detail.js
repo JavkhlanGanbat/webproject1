@@ -62,13 +62,17 @@ class BookDetail extends HTMLElement {
                 .image-section {
                     top: 40px;
                     height: fit-content;
+                    aspect-ratio: 3/4;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
 
                 .book-image {
                     width: 100%;
-                    height: auto;
-                    max-height: 80vh;
-                    aspect-ratio: 3/4;
+                    height: 100%;
+                    max-height: min(80vh, 600px);
+                    min-height: 300px;
                     object-fit: contain;
                     border-radius: 8px;
                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -212,6 +216,19 @@ class BookDetail extends HTMLElement {
                     .book-title {
                         font-size: 2em;
                     } 
+                }
+
+                @media (orientation: landscape) and (max-width: 1024px) {
+                    .image-section {
+                        aspect-ratio: 4/3;
+                        max-height: 70vh;
+                    }
+                    
+                    .book-image {
+                        max-height: 70vh;
+                        width: auto;
+                        max-width: 100%;
+                    }
                 }
             </style>
             <div class="error-container">
@@ -252,19 +269,24 @@ class BookDetail extends HTMLElement {
                 .detail-container {
                     display: grid;
                     grid-template-columns: minmax(min(400px, 100%), 1fr) 2fr;
-                    padding: clamp(1rem, 5vw, 2.5rem);
-                    gap: clamp(1rem, 3vw, 3.75rem);
+                    padding: clamp(1rem, 3vw, 2.5rem);
+                    gap: clamp(1rem, 5vw, 3.75rem);
                 }
                 .image-section {
                     top: 40px;
                     height: fit-content;
+                    aspect-ratio: 3/4;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
 
                 .book-image {
                     width: 100%;
-                    height: auto;
-                    max-height: 80vh;
-                    object-fit: contain;
+                    height: 100%;
+                    max-height: min(80vh, 600px);
+                    min-height: 500px;
+                    object-fit: cover;
                     border-radius: 8px;
                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
                 }
@@ -407,6 +429,19 @@ class BookDetail extends HTMLElement {
                     .book-title {
                         font-size: 2em;
                     } 
+                }
+
+                @media (orientation: landscape) and (max-width: 1024px) {
+                    .image-section {
+                        aspect-ratio: 4/3;
+                        max-height: 70vh;
+                    }
+                    
+                    .book-image {
+                        max-height: 70vh;
+                        width: auto;
+                        max-width: 100%;
+                    }
                 }
             </style>
     <div class="detail-container">
