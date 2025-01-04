@@ -70,6 +70,24 @@ import { pool } from '../db.js';
  *                       type: string
  *                     sort:
  *                       type: string
+ *             example:
+ *               books: [
+ *                 {
+ *                   id: 1,
+ *                   title: "The Great Gatsby",
+ *                   author: "F. Scott Fitzgerald",
+ *                   price: 9.99,
+ *                   category: "fiction"
+ *                 }
+ *               ]
+ *               total: 1
+ *               totalPages: 1
+ *               currentPage: 1
+ *               filters: {
+ *                 search: "",
+ *                 category: "all",
+ *                 sort: "price_asc"
+ *               }
  *       500:
  *         description: Server error
  *         content:
@@ -207,6 +225,22 @@ export async function getBookById(req, res) {
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Book'
+ *           example:
+ *             title: "New Book Title"
+ *             author: "Author Name"
+ *             price: 29.99
+ *             category: "fiction"
+ *             isbn: "978-1234567890"
+ *             publish_date: "2023-01-01"
+ *             publisher: "Publisher Name"
+ *             language: "English"
+ *             pages: 300
+ *             format: "Hardcover"
+ *             description: "Book description here"
+ *             cover_image: "https://example.com/cover.jpg"
+ *             rating: 0
+ *             reviews: 0
+ *             in_stock: true
  *     responses:
  *       201:
  *         description: Book created successfully

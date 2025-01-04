@@ -11,13 +11,27 @@ const swaggerOptions = {
             description: 'RESTful API for managing books in an online bookstore',
             contact: {
                 name: 'API Support',
-                email: 'support@example.com'
+                email: 'support@example.com',
+                url: 'https://example.com/support'
+            },
+            license: {
+                name: 'MIT',
+                url: 'https://opensource.org/licenses/MIT'
             }
         },
         servers: [
             {
                 url: 'http://localhost:3000/api',
                 description: 'Development server'
+            },
+            {
+                url: 'https://api.example.com/api',
+                description: 'Production server'
+            }
+        ],
+        security: [
+            {
+                ApiKeyAuth: []
             }
         ],
         tags: [
@@ -27,6 +41,14 @@ const swaggerOptions = {
             }
         ],
         components: {
+            securitySchemes: {
+                ApiKeyAuth: {
+                    type: 'apiKey',
+                    in: 'header',
+                    name: 'X-API-Key',
+                    description: 'API key for secure access'
+                }
+            },
             schemas: {
                 Book: {
                     type: 'object',
@@ -99,6 +121,24 @@ const swaggerOptions = {
                             type: 'boolean',
                             description: 'Whether the book is in stock'
                         }
+                    },
+                    example: {
+                        id: 1,
+                        title: 'The Great Gatsby',
+                        author: 'F. Scott Fitzgerald',
+                        price: 9.99,
+                        category: 'fiction',
+                        isbn: '978-0743273565',
+                        publish_date: '2004-09-30',
+                        publisher: 'Scribner',
+                        language: 'English',
+                        pages: 180,
+                        format: 'Paperback',
+                        description: 'The Great Gatsby is a novel by F. Scott Fitzgerald...',
+                        cover_image: 'https://example.com/images/great-gatsby.jpg',
+                        rating: 4.5,
+                        reviews: 2584,
+                        in_stock: true
                     }
                 },
                 Error: {
@@ -129,4 +169,25 @@ const swaggerOptions = {
 };
 
 export const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+// Custom options for Swagger UI
+export const swaggerUiOptions = {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "Books API Documentation",
+    customfavIcon: "/favicon.ico",
+    swaggerOptions: {
+        displayRequestDuration: true,
+        docExpansion: 'none',
+        filter: true,
+        showCommonExtensions: true,
+        syntaxHighlight: {
+            activate: true,
+            theme: "monokai"
+        },
+        tryItOutEnabled: true,
+        persistAuthorization: true
+    }
+};
+
 export { swaggerUi };

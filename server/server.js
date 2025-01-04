@@ -9,4 +9,5 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.listen(config.port, () => {
     console.log(`Server running on port ${config.port}`);
     console.log(`http://localhost:${config.port}`);
+    console.log(`API documentation: http://localhost:${config.port}/api-docs`);
 });

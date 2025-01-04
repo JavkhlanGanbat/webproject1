@@ -1,7 +1,7 @@
 import express from 'express';
 import { booksRouter } from './routes/books.js';
 import { setupStaticMiddleware, setupDefaultRoute } from './middleware/static.js';
-import { swaggerDocs, swaggerUi } from '../swaggerDocs.js';
+import { swaggerDocs, swaggerUi, swaggerUiOptions } from '../swaggerDocs.js';
 
 export const createApp = () => {
     const app = express();
@@ -19,7 +19,7 @@ export const createApp = () => {
     });
 
     // API and Documentation routes BEFORE static middleware
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, swaggerUiOptions));
     app.use('/api', booksRouter);
 
     // Static and catch-all routes LAST
