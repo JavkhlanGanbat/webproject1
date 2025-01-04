@@ -2,9 +2,39 @@ import { LikesStorage } from '../js/likesStorage.js';
 import { Router } from '../js/router.js';
 
 class BookItem extends HTMLElement {
+    static get observedAttributes() {
+        return ['data-price', 'data-title'];
+    }
+
+    get price() {
+        return this._price || 0;
+    }
+
+    set price(value) {
+        this._price = value;
+        this.dataset.price = value;
+        this.render();
+    }
+
+    get title() {
+        return this._title || '';
+    }
+
+    set title(value) {
+        this._title = value;
+        this.dataset.title = value;
+        this.render();
+    }
+
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue === newValue) return;
+        if (name === 'data-price') this.price = newValue;
+        if (name === 'data-title') this.title = newValue;
     }
 
     connectedCallback() {
@@ -12,15 +42,12 @@ class BookItem extends HTMLElement {
     }
 
     toggleLike() {
-        const bookId = this.dataset.id;
-        const isLiked = LikesStorage.toggleLike(bookId);
+        const isLiked = LikesStorage.toggleLike(this.dataset.id);
         this.render();
-        
-        // Dispatch event for any interested components
         this.dispatchEvent(new CustomEvent('like-changed', {
             bubbles: true,
             composed: true,
-            detail: { bookId, isLiked }
+            detail: { bookId: this.dataset.id, isLiked }
         }));
     }
 
@@ -186,16 +213,15 @@ class BookItem extends HTMLElement {
     }
 
     addToCart() {
-        const event = new CustomEvent('add-to-cart', {
+        this.dispatchEvent(new CustomEvent('add-to-cart', {
             bubbles: true,
             composed: true,
             detail: {
                 id: this.dataset.id,
-                title: this.dataset.title,
-                price: this.dataset.price
+                title: this.title,
+                price: this.price
             }
-        });
-        this.dispatchEvent(event);
+        }));
     }
 
     showDetails() {

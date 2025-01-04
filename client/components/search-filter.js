@@ -3,9 +3,38 @@ class SearchFilter extends HTMLElement {
         return ['data-search', 'data-sort', 'data-category'];
     }
 
+    // Core properties only
+    get searchValue() {
+        return this._searchValue || '';
+    }
+    
+    set searchValue(value) {
+        this._searchValue = value;
+        this.updateInput('search', value);
+    }
+
+    get sortValue() {
+        return this._sortValue || 'price_asc';
+    }
+
+    set sortValue(value) {
+        this._sortValue = value;
+        this.updateInput('sort', value);
+    }
+
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+    }
+
+    updateInput(id, value) {
+        if (this.shadowRoot) {
+            const element = this.shadowRoot.getElementById(id);
+            if (element) {
+                element.value = value;
+                this.dataset[id] = value;
+            }
+        }
     }
 
     connectedCallback() {
@@ -21,9 +50,12 @@ class SearchFilter extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (this.shadowRoot && oldValue !== newValue) {
-            this.updateInputs();
-        }
+        if (oldValue === newValue) return;
+        
+        const attr = name.replace('data-', '');
+        if (attr === 'search') this.searchValue = newValue;
+        else if (attr === 'sort') this.sortValue = newValue;
+        else if (attr === 'category') this.updateInput('category', newValue);
     }
 
     updateInputs() {
@@ -181,7 +213,6 @@ class SearchFilter extends HTMLElement {
                 </div>
             </div>
         `;
-        
         this.addEventListeners();
     }
 
