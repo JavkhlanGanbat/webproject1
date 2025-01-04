@@ -4,34 +4,28 @@ class BookList extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        this.state = {
-            page: 1,
-            itemsPerPage: 10,
-            filters: {
-                search: '',
-                sort: 'price_asc',  // Changed default
-                category: 'all'
-            },
-            books: [],
-            totalPages: 0
-        };
+        this.state = this.getInitialState();
     }
 
-    async connectedCallback() {
-        // Initialize state from URL parameters
+    getInitialState() {
         const params = new URLSearchParams(window.location.search);
-        this.state = {
+        return {
             page: parseInt(params.get('page')) || 1,
             itemsPerPage: 10,
             filters: {
                 search: params.get('search') || '',
-                sort: params.get('sort'),
+                sort: params.get('sort') || 'price_asc',
                 category: params.get('category') || 'all'
             },
             books: [],
-            totalPages: 0
+            totalPages: 0,
+            loading: false,
+            error: null
         };
+    }
 
+    async connectedCallback() {
+        this.state = this.getInitialState();
         await this.fetchBooks();
         this.setupEventListeners();
     }
@@ -67,13 +61,31 @@ class BookList extends HTMLElement {
     }
 
     async fetchBooks() {
-        const { books, totalPages } = await BookService.getBooks(
-            this.state.page,
-            { ...this.state.filters, itemsPerPage: this.state.itemsPerPage }
-        );
-        this.state.books = books;
-        this.state.totalPages = totalPages;
-        this.render();
+        try {
+            this.state.loading = true;
+            this.render();
+
+            const params = {
+                page: this.state.page,
+                limit: this.state.itemsPerPage,
+                ...this.state.filters
+            };
+
+            const { books, totalPages } = await BookService.getBooks(params);
+            
+            this.state = {
+                ...this.state,
+                books,
+                totalPages,
+                loading: false,
+                error: null
+            };
+        } catch (error) {
+            this.state.error = 'Failed to load books';
+            this.state.loading = false;
+        } finally {
+            this.render();
+        }
     }
 
     getBookSummary(book) {
@@ -88,9 +100,6 @@ class BookList extends HTMLElement {
     }
 
     render() {
-        // Preload first page of book covers
-        this.preloadImages(this.state.books);
-
         this.shadowRoot.innerHTML = `
             <style>
                 .book-grid {
@@ -161,41 +170,45 @@ class BookList extends HTMLElement {
                     font-size: 0.8em;
                     margin-left: 10px;
                 }
+                .loading { opacity: 0.5; }
+                .error { color: red; padding: 20px; text-align: center; }
             </style>
-            <search-filter
-                data-search="${this.state.filters.search}"
-                data-sort="${this.state.filters.sort}"
-                data-category="${this.state.filters.category}">
-            </search-filter>
-            <div class="results-count">
-                Нийт ${this.state.books.length} ном
-                ${this.hasActiveFilters() ? `
-                    <button class="clear-filters" onclick="this.getRootNode().host.clearFilters()">
-                        Шүүлтүүрийг цэвэрлэх
-                    </button>
-                ` : ''}
+            ${this.state.error ? `<div class="error">${this.state.error}</div>` : ''}
+            <div class="${this.state.loading ? 'loading' : ''}">
+                <search-filter
+                    data-search="${this.state.filters.search}"
+                    data-sort="${this.state.filters.sort}"
+                    data-category="${this.state.filters.category}">
+                </search-filter>
+                <div class="results-count">
+                    Нийт ${this.state.books.length} ном
+                    ${this.hasActiveFilters() ? `
+                        <button class="clear-filters" onclick="this.getRootNode().host.clearFilters()">
+                            Шүүлтүүрийг цэвэрлэх
+                        </button>
+                    ` : ''}
+                </div>
+                <div class="book-grid">
+                    ${this.state.books.length ? 
+                        this.state.books.map(book => `
+                            <book-item 
+                                data-id="${book.id}"
+                                data-title="${book.title}"
+                                data-price="${book.price}"
+                                data-author="${book.author}"
+                                data-category="${book.category}"
+                                data-image="${book.cover_image}">
+                            </book-item>
+                        `).join('')
+                        : '<div class="no-results">Таны хайлтын дагуу ном олдсонгүй</div>'
+                    }
+                </div>
+                <pagination-control
+                    current-page="${this.state.page}"
+                    total-pages="${this.state.totalPages}"
+                    items-per-page="${this.state.itemsPerPage}">
+                </pagination-control>
             </div>
-            <div class="book-grid">
-                ${this.state.books.length ? 
-                    this.state.books.map(book => `
-                        <book-item 
-                            data-id="${book.id}"
-                            data-title="${book.title}"
-                            data-price="${book.price}"
-                            data-author="${book.author}"
-                            data-category="${book.category}"
-                            data-image="${book.cover_image}">
-                        </book-item>
-                    `).join('')
-                    : '<div class="no-results">Таны хайлтын дагуу ном олдсонгүй</div>'
-                }
-            </div>
-            <pagination-control
-                current-page="${this.state.page}"
-                total-pages="${this.state.totalPages}"
-                items-per-page="${this.state.itemsPerPage}">
-            </pagination-control>
-
         `;
     }
 
