@@ -21,10 +21,6 @@ const swaggerOptions = {
                     type: 'object',
                     required: ['title', 'author', 'price'],
                     properties: {
-                        id: {
-                            type: 'integer',
-                            description: 'Номын автоматаар үүсгэгдсэн ID'
-                        },
                         title: {
                             type: 'string',
                             description: 'Номын гарчиг'
@@ -90,7 +86,6 @@ const swaggerOptions = {
                         }
                     },
                     example: {
-                        id: 1,
                         title: 'The Great Gatsby',
                         author: 'F. Scott Fitzgerald',
                         price: 9.99,
