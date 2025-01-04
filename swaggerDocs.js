@@ -9,46 +9,13 @@ const swaggerOptions = {
             title: 'Books API Documentation',
             version: '1.0.0',
             description: 'RESTful API for managing books in an online bookstore',
-            contact: {
-                name: 'API Support',
-                email: 'support@example.com',
-                url: 'https://example.com/support'
-            },
-            license: {
-                name: 'MIT',
-                url: 'https://opensource.org/licenses/MIT'
-            }
         },
         servers: [
             {
-                url: 'http://localhost:3000/api',
-                description: 'Development server'
-            },
-            {
-                url: 'https://api.example.com/api',
-                description: 'Production server'
-            }
-        ],
-        security: [
-            {
-                ApiKeyAuth: []
-            }
-        ],
-        tags: [
-            {
-                name: 'Books',
-                description: 'API endpoints for book operations'
+                url: 'http://localhost:3000/'
             }
         ],
         components: {
-            securitySchemes: {
-                ApiKeyAuth: {
-                    type: 'apiKey',
-                    in: 'header',
-                    name: 'X-API-Key',
-                    description: 'API key for secure access'
-                }
-            },
             schemas: {
                 Book: {
                     type: 'object',
