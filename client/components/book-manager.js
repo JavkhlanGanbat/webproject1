@@ -1,6 +1,17 @@
+/**
+ * BookManager компонент
+ * Номын удирдлагын хэсэг:
+ * - Номын жагсаалт харуулах
+ * - Шинэ ном нэмэх
+ * - Ном засах
+ * - Ном устгах
+ * - Алдааны мэдээлэл харуулах
+ */
+
 import { BookService } from '../js/bookService.js';
 import './modal-dialog.js';
 
+// Удирдлагын хэсгийн загвар
 const managerTemplate = document.createElement('template');
 managerTemplate.innerHTML = `
     <style>
@@ -251,32 +262,39 @@ managerTemplate.innerHTML = `
 class BookManager extends HTMLElement {
     constructor() {
         super();
+        // Shadow DOM холбох
         this.attachShadow({ mode: 'open' });
+        // Анхны төлөв тохируулах
         this.state = {
-            books: [],
-            showForm: false,
-            editingBook: null, // New state for tracking editing book
-            error: null
+            books: [],            // Номын жагсаалт
+            showForm: false,      // Форм харуулах эсэх
+            editingBook: null,    // Засаж буй номын мэдээлэл
+            error: null          // Алдааны мэдээлэл
         };
+        // Event handler-уудыг bind хийх
         this.handleModalClose = this.handleModalClose.bind(this);
     }
 
+    // Компонент DOM-д холбогдох үед ном татах
     async connectedCallback() {
         await this.fetchBooks();
         this.render();
     }
 
+    // Номын жагсаалт татах
     async fetchBooks() {
         const { books } = await BookService.getBooks();
         this.state.books = books;
         this.render();
     }
 
+    // Шинэ ном нэмэх
     async addBook(book) {
         // Implement add book logic
         await this.fetchBooks();
     }
 
+    // Номын мэдээлэл засах
     async editBook(bookId) {
         try {
             const book = await BookService.getBookById(bookId);
@@ -289,11 +307,13 @@ class BookManager extends HTMLElement {
         }
     }
 
+    // Ном устгах
     async deleteBook(bookId) {
         // Implement delete book logic
         await this.fetchBooks();
     }
 
+    // Форм харуулах/нуух
     toggleForm() {
         this.state.showForm = !this.state.showForm;
         if (!this.state.showForm) {
@@ -302,6 +322,7 @@ class BookManager extends HTMLElement {
         this.render();
     }
 
+    // Форм илгээх үед дуудагдах
     async handleFormSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -344,6 +365,7 @@ class BookManager extends HTMLElement {
         this.render();
     }
 
+    // Ном устгах үед дуудагдах
     async handleDeleteBook(bookId) {
         if (!confirm('Are you sure you want to delete this book?')) {
             return;
@@ -358,12 +380,14 @@ class BookManager extends HTMLElement {
         }
     }
 
+    // Модал цонх хаах үед дуудагдах
     handleModalClose() {
         this.state.showForm = false;
         this.state.editingBook = null;
         this.render();
     }
 
+    // Номын форм үүсгэх
     getFormTemplate(book) {
         return `
             <form class="add-form" onsubmit="this.getRootNode().host.handleFormSubmit(event)">
@@ -466,6 +490,7 @@ class BookManager extends HTMLElement {
         `;
     }
 
+    // Нэг номын мөр үүсгэх
     getBookItemTemplate(book) {
         return `
             <div class="book-item" data-id="${book.id}">
@@ -483,6 +508,7 @@ class BookManager extends HTMLElement {
         `;
     }
 
+    // Компонентыг дүрслэх
     render() {
         this.shadowRoot.innerHTML = '';
         this.shadowRoot.appendChild(managerTemplate.content.cloneNode(true));

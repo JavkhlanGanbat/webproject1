@@ -1,9 +1,19 @@
+/**
+ * SearchFilter компонент
+ * Номын жагсаалтыг шүүх, эрэмбэлэх удирдлагын компонент
+ * - Хайлтын талбар
+ * - Үнээр эрэмбэлэх сонголт
+ * - Ангиллаар шүүх сонголт
+ * - URL параметрүүдтэй синхрончлогдоно
+ */
+
 class SearchFilter extends HTMLElement {
+    // Ажиглах шинж чанарууд
     static get observedAttributes() {
         return ['data-search', 'data-sort', 'data-category'];
     }
 
-    // Core properties only
+    // Хайлтын утгын getter, setter
     get searchValue() {
         return this._searchValue || '';
     }
@@ -13,6 +23,7 @@ class SearchFilter extends HTMLElement {
         this.updateInput('search', value);
     }
 
+    // Эрэмбэлэх утгын getter, setter
     get sortValue() {
         return this._sortValue || 'price_asc';
     }
@@ -37,6 +48,7 @@ class SearchFilter extends HTMLElement {
         }
     }
 
+    // URL параметрүүдээс анхны утгуудыг унших
     connectedCallback() {
         this.render();
         this.addEventListeners();
@@ -49,6 +61,7 @@ class SearchFilter extends HTMLElement {
         this.updateInputs();
     }
 
+    // Шинж чанар өөрчлөгдөх үед дуудагдах
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
         
@@ -58,6 +71,7 @@ class SearchFilter extends HTMLElement {
         else if (attr === 'category') this.updateInput('category', newValue);
     }
 
+    // Оролтын утгуудыг шинэчлэх
     updateInputs() {
         if (!this.shadowRoot) return;
         
@@ -70,6 +84,7 @@ class SearchFilter extends HTMLElement {
         if (categorySelect) categorySelect.value = this.dataset.category || 'all';
     }
 
+    // Үйл явдал сонсогчдыг тохируулах
     addEventListeners() {
         const searchInput = this.shadowRoot.getElementById('search');
         const searchButton = this.shadowRoot.getElementById('searchButton');
@@ -92,6 +107,7 @@ class SearchFilter extends HTMLElement {
         categorySelect.addEventListener('change', () => this.emitFilterChange());
     }
 
+    // Шүүлтүүр өөрчлөгдөх үед дуудагдах
     emitFilterChange() {
         const searchInput = this.shadowRoot.getElementById('search');
         const sortSelect = this.shadowRoot.getElementById('sort');
@@ -121,6 +137,7 @@ class SearchFilter extends HTMLElement {
         }));
     }
 
+    // Компонентыг дүрслэх
     render() {
         this.shadowRoot.innerHTML = `
             <style>
@@ -216,6 +233,7 @@ class SearchFilter extends HTMLElement {
         this.addEventListeners();
     }
 
+    // Шүүлтүүрүүдийг дахин тохируулах
     resetFilters() {
         if (!this.shadowRoot) return;
         

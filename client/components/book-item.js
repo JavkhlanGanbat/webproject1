@@ -1,11 +1,21 @@
+/**
+ * BookItem компонент
+ * Энэхүү компонент нь нэг номын мэдээллийг харуулах карт юм.
+ * - Номын үндсэн мэдээлэл (зураг, гарчиг, үнэ)
+ * - Таалагдсан номын жагсаалтад нэмэх
+ * - Сагсанд нэмэх
+ * - Дэлгэрэнгүй мэдээлэл харах зэрэг үйлдлүүдийг агуулна
+ */
 import { LikesStorage } from '../js/likesStorage.js';
 import { Router } from '../js/router.js';
 
 class BookItem extends HTMLElement {
+    // Ажиглах шинж чанарууд
     static get observedAttributes() {
         return ['data-price', 'data-title'];
     }
 
+    // Үнийн getter, setter
     get price() {
         return this._price || 0;
     }
@@ -16,6 +26,7 @@ class BookItem extends HTMLElement {
         this.render();
     }
 
+    // Гарчгийн getter, setter
     get title() {
         return this._title || '';
     }
@@ -28,19 +39,23 @@ class BookItem extends HTMLElement {
 
     constructor() {
         super();
+        // Shadow DOM ашиглан компонентын дотоод бүтцийг тусгаарлана
         this.attachShadow({ mode: 'open' });
     }
 
+    // Шинж чанар өөрчлөгдөх үед дуудагдах функц
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
         if (name === 'data-price') this.price = newValue;
         if (name === 'data-title') this.title = newValue;
     }
 
+    // Компонент DOM-д холбогдох үед дуудагдах функц
     connectedCallback() {
         this.render();
     }
 
+    // Таалагдсан номын жагсаалтад нэмэх/хасах
     toggleLike() {
         const isLiked = LikesStorage.toggleLike(this.dataset.id);
         this.render();
@@ -51,6 +66,7 @@ class BookItem extends HTMLElement {
         }));
     }
 
+    // Компонентыг дүрслэх функц
     render() {
         const { title, price, author, id, category, image } = this.dataset;
         const isLiked = LikesStorage.isLiked(id);
@@ -210,6 +226,7 @@ class BookItem extends HTMLElement {
         `;
     }
 
+    // Компонент харагдах хэсэгт байгаа эсэхийг шалгах
     isInViewport() {
         const rect = this.getBoundingClientRect();
         return (
@@ -220,6 +237,7 @@ class BookItem extends HTMLElement {
         );
     }
 
+    // Сагсанд нэмэх үйлдэл
     addToCart() {
         this.dispatchEvent(new CustomEvent('add-to-cart', {
             bubbles: true,
@@ -232,6 +250,7 @@ class BookItem extends HTMLElement {
         }));
     }
 
+    // Дэлгэрэнгүй мэдээлэл харуулах
     showDetails() {
         Router.navigateToBook(this.dataset.id);
     }

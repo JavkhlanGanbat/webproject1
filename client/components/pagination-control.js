@@ -1,18 +1,29 @@
+/**
+ * PaginationControl компонент
+ * Хуудаслалтын удирдлагын компонент
+ * - Хуудасны дугаарууд
+ * - Өмнөх/Дараах хуудас руу шилжих товчнууд
+ * - Идэвхтэй хуудасны тэмдэглэгээ
+ */
+
 class PaginationControl extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
+    // Ажиглах шинж чанарууд: одоогийн хуудас, нийт хуудас, хуудас бүрийн хэмжээ
     static get observedAttributes() {
         return ['current-page', 'total-pages', 'items-per-page'];
     }
 
+    // Компонент DOM-д холбогдох үед
     connectedCallback() {
         this.render();
         this.addEventListeners();
     }
 
+    // Хуудас сонгох үйл явдлын сонсогч
     addEventListeners() {
         this.shadowRoot.addEventListener('click', (e) => {
             if (e.target.matches('.page-button')) {
@@ -26,6 +37,7 @@ class PaginationControl extends HTMLElement {
         });
     }
 
+    // Компонентыг дүрслэх
     render() {
         const currentPage = parseInt(this.getAttribute('current-page')) || 1;
         const totalPages = parseInt(this.getAttribute('total-pages')) || 1;
@@ -68,18 +80,19 @@ class PaginationControl extends HTMLElement {
                 <button class="page-button" 
                     data-page="${currentPage - 1}"
                     ${currentPage <= 1 ? 'disabled' : ''}>
-                    <-
+                    <- 
                 </button>
                 ${this.generatePageButtons(currentPage, totalPages)}
                 <button class="page-button"
                     data-page="${currentPage + 1}"
                     ${currentPage >= totalPages ? 'disabled' : ''}>
-                    ->
+                    -> 
                 </button>
             </div>
         `;
     }
 
+    // Хуудасны товчнуудыг үүсгэх
     generatePageButtons(current, total) {
         const pages = [];
         const maxVisible = 5;

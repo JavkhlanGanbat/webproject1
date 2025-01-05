@@ -1,6 +1,15 @@
+/**
+ * Swagger баримтжуулалтын тохиргоо
+ * - API-н ерөнхий мэдээлэл
+ * - Серверийн тохиргоо
+ * - Өгөгдлийн загварууд (Book, Error)
+ * - UI тохиргоо
+ */
+
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
+// Swagger-н үндсэн тохиргоо
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
@@ -141,9 +150,7 @@ const swaggerOptions = {
     apis: ['./server/routes/*.js', './server/controllers/*.js']
 };
 
-export const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-// Custom options for Swagger UI
+// Swagger UI-н нэмэлт тохиргоо
 export const swaggerUiOptions = {
     explorer: true,
     customCss: '.swagger-ui .topbar { display: none }',
@@ -163,4 +170,5 @@ export const swaggerUiOptions = {
     }
 };
 
+export const swaggerDocs = swaggerJsDoc(swaggerOptions);
 export { swaggerUi };

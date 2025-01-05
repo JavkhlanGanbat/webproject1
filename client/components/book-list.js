@@ -1,46 +1,63 @@
+/**
+ * BookList компонент
+ * Энэхүү компонент нь номын жагсаалтыг харуулах үндсэн компонент юм.
+ * - Номын жагсаалтыг серверээс татаж авах
+ * - Хуудаслалт хийх
+ * - Шүүлтүүр хийх
+ * - Эрэмбэлэх зэрэг үндсэн үйлдлүүдийг гүйцэтгэнэ
+ */
 import { BookService } from '../js/bookService.js';
 
 class BookList extends HTMLElement {
     constructor() {
         super();
+        // Shadow DOM ашиглан компонентын дотоод бүтцийг тусгаарлана
         this.attachShadow({ mode: 'open' });
+        // Анхны төлөвийг тохируулах
         this.state = this.getInitialState();
     }
 
+    // Анхны төлөвийг URL-с уншиж авах
     getInitialState() {
         const params = new URLSearchParams(window.location.search);
         return {
-            page: parseInt(params.get('page')) || 1,
-            itemsPerPage: 10,
+            page: parseInt(params.get('page')) || 1,        // Идэвхтэй хуудас
+            itemsPerPage: 10,                              // Нэг хуудсанд харуулах номын тоо
             filters: {
-                search: params.get('search') || '',
-                sort: params.get('sort') || 'price_asc',
-                category: params.get('category') || 'all'
+                search: params.get('search') || '',        // Хайлтын утга
+                sort: params.get('sort') || 'price_asc',   // Эрэмбэлэх утга
+                category: params.get('category') || 'all'   // Ангилал
             },
-            books: [],
-            totalPages: 0,
-            loading: false,
-            error: null
+            books: [],          // Номын жагсаалт
+            totalPages: 0,      // Нийт хуудасны тоо
+            loading: false,     // Ачаалж байгаа эсэх
+            error: null         // Алдааны мэдээлэл
         };
     }
 
+    // Компонент DOM-д холбогдох үед дуудагдах функц
     async connectedCallback() {
         this.state = this.getInitialState();
         await this.fetchBooks();
         this.setupEventListeners();
     }
 
+    // DOM-с салгах үед цэвэрлэгч функц
     disconnectedCallback() {
         // Cleanup for back/forward cache
         this.shadowRoot.removeEventListener('filter-change', this.handleFilterChange);
         this.shadowRoot.removeEventListener('page-change', this.handlePageChange);
     }
 
+    // Үйл явдал сонсогчдыг тохируулах
     setupEventListeners() {
+        // Шүүлтүүр өөрчлөгдөх үед
         this.shadowRoot.addEventListener('filter-change', (e) => this.handleFilterChange(e.detail));
+        // Хуудас сонгох үед
         this.shadowRoot.addEventListener('page-change', (e) => this.handlePageChange(e.detail.page));
     }
 
+    // Шүүлтүүр өөрчлөгдөх үед дуудагдах функц
     async handleFilterChange(filters) {
         this.state = {
             ...this.state,
@@ -50,6 +67,7 @@ class BookList extends HTMLElement {
         await this.fetchBooks();
     }
 
+    // Хуудас өөрчлөгдөх үед дуудагдах функц
     async handlePageChange(page) {
         // Update URL with new page number
         const params = new URLSearchParams(window.location.search);
@@ -60,6 +78,7 @@ class BookList extends HTMLElement {
         await this.fetchBooks();
     }
 
+    // Серверээс номын жагсаалт татах
     async fetchBooks() {
         try {
             this.state.loading = true;
@@ -88,6 +107,7 @@ class BookList extends HTMLElement {
         }
     }
 
+    // Номын товч мэдээллийг боловсруулах
     getBookSummary(book) {
         return {
             id: book.id,
@@ -99,6 +119,7 @@ class BookList extends HTMLElement {
         };
     }
 
+    // Компонентыг дүрслэх функц
     render() {
         this.shadowRoot.innerHTML = `
             <style>
@@ -212,6 +233,7 @@ class BookList extends HTMLElement {
         `;
     }
 
+    // Зургуудыг урьдчилан ачаалах
     preloadImages(books) {
         // Only preload first visible books
         const visibleBooks = books.slice(0, this.state.itemsPerPage);
@@ -224,11 +246,13 @@ class BookList extends HTMLElement {
         });
     }
 
+    // Идэвхтэй шүүлтүүр байгаа эсэхийг шалгах
     hasActiveFilters() {
         return this.state.filters.search.trim() !== '' || 
                this.state.filters.category !== 'all';
     }
 
+    // Бүх шүүлтүүрийг цэвэрлэх
     clearFilters() {
         this.state.filters = {
             search: '',

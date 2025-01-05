@@ -1,3 +1,12 @@
+/**
+ * Номын удирдлагын контроллер
+ * Энэхүү файл нь номын өгөгдөлтэй харьцах бүх үндсэн үйлдлүүдийг агуулна:
+ * - Номын жагсаалт авах (getAllBooks)
+ * - Нэг номын мэдээлэл авах (getBookById)
+ * - Шинэ ном нэмэх (createBook)
+ * - Номын мэдээлэл засах (updateBook)
+ * - Ном устгах (deleteBook)
+ */
 import { pool } from '../db.js';
 
 /**
@@ -95,6 +104,17 @@ import { pool } from '../db.js';
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Номын жагсаалт авах функц
+ * @param {Object} req - Хүсэлтийн объект
+ * @param {Object} req.query - Query параметрүүд
+ * @param {number} req.query.page - Хуудасны дугаар
+ * @param {number} req.query.limit - Хуудас бүрт харуулах номын тоо
+ * @param {string} req.query.search - Хайх утга
+ * @param {string} req.query.category - Ангилал
+ * @param {string} req.query.sort - Эрэмбэлэх утга
+ */
 export async function getAllBooks(req, res) {
     try {
         const { page = 1, limit = 10, search = '', category = 'all', sort = 'price_asc' } = req.query;
@@ -181,6 +201,13 @@ export async function getAllBooks(req, res) {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Нэг номын мэдээлэл ID-гаар авах
+ * @param {Object} req - Хүсэлтийн объект
+ * @param {Object} req.params - URL параметрүүд
+ * @param {string} req.params.id - Номын ID
+ */
 export async function getBookById(req, res) {
     try {
         const { id } = req.params;
@@ -196,6 +223,7 @@ export async function getBookById(req, res) {
         res.status(500).json({ error: err.message });
     }
 }
+
 /**
  * @openapi
  * /books/{id}:
@@ -232,6 +260,13 @@ export async function getBookById(req, res) {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Ном устгах функц
+ * @param {Object} req - Хүсэлтийн объект
+ * @param {Object} req.params - URL параметрүүд
+ * @param {string} req.params.id - Устгах номын ID
  */
 export async function deleteBook(req, res) {
     try {
@@ -322,6 +357,20 @@ export async function deleteBook(req, res) {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Номын мэдээлэл шинэчлэх функц
+ * @param {Object} req - Хүсэлтийн объект
+ * @param {Object} req.params - URL параметрүүд
+ * @param {string} req.params.id - Шинэчлэх номын ID
+ * @param {Object} req.body - Шинэчлэх өгөгдөл
+ * @param {string} req.body.title - Номын гарчиг
+ * @param {string} req.body.author - Зохиолч
+ * @param {number} req.body.price - Үнэ
+ * @param {string} req.body.category - Ангилал
+ * @param {string} req.body.isbn - ISBN дугаар
+ * ... гэх мэт
+ */
 export async function updateBook(req, res) {
     try {
         const { id } = req.params;
@@ -380,6 +429,7 @@ export async function updateBook(req, res) {
         res.status(500).json({ error: err.message });
     }
 }
+
 /**
  * @openapi
  * /books:
@@ -428,6 +478,24 @@ export async function updateBook(req, res) {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Шинэ ном үүсгэх функц
+ * @param {Object} req - Хүсэлтийн объект
+ * @param {Object} req.body - Номын өгөгдөл
+ * @param {string} req.body.title - Номын гарчиг
+ * @param {string} req.body.author - Зохиолч
+ * @param {number} req.body.price - Үнэ
+ * @param {string} req.body.category - Ангилал
+ * @param {string} req.body.isbn - ISBN дугаар
+ * ... гэх мэт
+ * 
+ * Анхааруулга:
+ * - Бүх утгуудыг шалгаж баталгаажуулах
+ * - ISBN давхардахгүй байх
+ * - Үнэ 0-ээс их байх
+ * - Огноо хүчинтэй байх
  */
 export async function createBook(req, res) {
     try {

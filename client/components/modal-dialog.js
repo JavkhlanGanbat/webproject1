@@ -1,3 +1,12 @@
+/**
+ * ModalDialog компонент
+ * - Модал цонх харуулах
+ * - Агуулга оруулах slot-уудтай
+ * - Хаах товчтой
+ * - Анимацитай гарч ирэх
+ */
+
+// Модал цонхны загвар тодорхойлох
 const modalTemplate = document.createElement('template');
 modalTemplate.innerHTML = `
     <style>
@@ -66,16 +75,19 @@ modalTemplate.innerHTML = `
 `;
 
 class ModalDialog extends HTMLElement {
+    // Shadow DOM холбох
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
+    // Компонент DOM-д холбогдох үед загвар нэмэх
     connectedCallback() {
         this.shadowRoot.appendChild(modalTemplate.content.cloneNode(true));
         this.setupCloseButton();
     }
 
+    // Хаах товчны үйл ажиллагаа тохируулах
     setupCloseButton() {
         this.shadowRoot
             .getElementById('modal-close')
