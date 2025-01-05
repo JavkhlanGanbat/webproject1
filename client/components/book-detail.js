@@ -418,12 +418,9 @@ class BookDetail extends HTMLElement {
                     font-weight: bold;
                     font-size: 0.9em;
                     transition: background 0.3s ease, transform 0.2s ease;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                 }
 
                 .back-button:hover {
-                    background: var(--primary-color-dark, #0056b3);
-                    transform: translateY(-2px);
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
                 }
 

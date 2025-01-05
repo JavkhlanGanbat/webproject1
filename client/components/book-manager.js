@@ -367,7 +367,7 @@ class BookManager extends HTMLElement {
 
     // Ном устгах үед дуудагдах
     async handleDeleteBook(bookId) {
-        if (!confirm('Are you sure you want to delete this book?')) {
+        if (!confirm('Та энэ номыг устгах эсэхээ баталгаажуулна уу?')) {
             return;
         }
 
