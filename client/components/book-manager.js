@@ -410,7 +410,7 @@ class BookManager extends HTMLElement {
                     <div class="form-group">
                         <label for="category">Ангилал *</label>
                         <select name="category" required>
-                            ${['fiction', 'non-fiction', 'science', 'technology']
+                            ${['Fiction', 'Non-Fiction', 'Science', 'Technology']
                                 .map(cat => `<option value="${cat}" 
                                     ${book?.category === cat ? 'selected' : ''}>
                                     ${cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -445,7 +445,7 @@ class BookManager extends HTMLElement {
                     <div class="form-group">
                         <label for="format">Формат</label>
                         <select name="format">
-                            ${['hardcover', 'paperback', 'ebook', 'audiobook']
+                            ${['Hardcover', 'Paperback', 'Ebook', 'Audiobook']
                                 .map(format => `<option value="${format}" 
                                     ${book?.format === format ? 'selected' : ''}>
                                     ${format.charAt(0).toUpperCase() + format.slice(1)}
