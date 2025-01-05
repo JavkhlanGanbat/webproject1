@@ -268,7 +268,40 @@ export async function deleteBook(req, res) {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Book'
+ *             type: object
+ *             required: ['title', 'author', 'price']
+ *             properties:
+ *               title:
+ *                 type: string
+ *               author:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               category:
+ *                 type: string
+ *               isbn:
+ *                 type: string
+ *               publish_date:
+ *                 type: string
+ *                 format: date
+ *               publisher:
+ *                 type: string
+ *               language:
+ *                 type: string
+ *               pages:
+ *                 type: integer
+ *               format:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               cover_image:
+ *                 type: string
+ *               rating:
+ *                 type: number
+ *               reviews:
+ *                 type: integer
+ *               in_stock:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: Ном амжилттай шинэчлэгдлээ
