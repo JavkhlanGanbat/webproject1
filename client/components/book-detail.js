@@ -178,9 +178,27 @@ class BookDetail extends HTMLElement {
                 }
 
                 .back-button {
-                    background: var(--primary-color);
+                    background: var(--primary-color, #007bff); /* Default to primary color if variable not set */
                     color: white;
-                    flex: 1;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    font-size: 0.9em;
+                    transition: background 0.3s ease, transform 0.2s ease;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                }
+
+                .back-button:hover {
+                    background: var(--primary-color-dark, #0056b3);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                }
+
+                .back-button:active {
+                    transform: translateY(0);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                 }
 
                 @media (max-width: 1024px) {
@@ -232,10 +250,10 @@ class BookDetail extends HTMLElement {
                 }
             </style>
             <div class="error-container">
-                <h2 class="error-title">Book not found</h2>
-                <p>Sorry, we couldn't find the book you're looking for.</p>
+                <h2 class="error-title">404</h2>
+                <p>Уучлаарай. Таны хайсан ном олдсонгүй.</p>
                 <button class="back-button" onclick="window.history.back()">
-                    Return to Book List
+                    Буцах
                 </button>
             </div>
         `;
@@ -391,9 +409,27 @@ class BookDetail extends HTMLElement {
                 }
 
                 .back-button {
-                    background: var(--primary-color);
+                    background: var(--primary-color, #007bff); /* Default to primary color if variable not set */
                     color: white;
-                    flex: 1;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    font-size: 0.9em;
+                    transition: background 0.3s ease, transform 0.2s ease;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                }
+
+                .back-button:hover {
+                    background: var(--primary-color-dark, #0056b3);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                }
+
+                .back-button:active {
+                    transform: translateY(0);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                 }
 
                 @media (max-width: 1024px) {
@@ -474,11 +510,11 @@ class BookDetail extends HTMLElement {
             <div class="action-buttons">
                 <button class="action-button add-to-cart" 
                         onclick="this.getRootNode().host.addToCart()">
-                    Сагсанд нэмэх
+                    Сагслах
                 </button>
                 <button class="action-button back-button" 
                         onclick="window.history.back()">
-                    Номнууд руу буцах
+                    Буцах
                 </button>
             </div>
         </div>
