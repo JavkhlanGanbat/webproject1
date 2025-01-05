@@ -206,24 +206,7 @@ managerTemplate.innerHTML = `
             outline: none;
             box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
         }
-        .close-btn {
-            background: transparent;
-            border: none;
-            font-size: 1.5rem;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text-muted);
-        }
-        .close-btn:hover {
-            background: var(--search-bg);
-            color: var(--text-color);
-        }
+
     </style>
     <div class="book-manager">
         <h2>Админ хуудас</h2>
@@ -231,9 +214,38 @@ managerTemplate.innerHTML = `
             Ном нэмэх
         </button>
         
-        <div id="modal-slot"></div>
-        <div class="book-grid"><!-- books go here --></div>
+        <slot name="error"></slot>
+        <slot name="modal"></slot>
+        <div class="book-grid">
+            <slot name="books"></slot>
+        </div>
     </div>
+
+    <template id="book-item-template">
+        <div class="book-item">
+            <div class="book-info">
+                <h3><slot name="title"></slot></h3>
+                <p><slot name="author"></slot></p>
+            </div>
+            <div><slot name="price"></slot></div>
+            <div><slot name="category"></slot></div>
+            <div class="actions">
+                <button class="edit-btn">Засах</button>
+                <button class="delete-btn">Устгах</button>
+            </div>
+        </div>
+    </template>
+
+    <template id="book-form-template">
+        <form class="add-form">
+            <div class="form-content">
+                <slot name="form-fields"></slot>
+            </div>
+            <div class="form-actions">
+                <slot name="form-actions"></slot>
+            </div>
+        </form>
+    </template>
 `;
 
 class BookManager extends HTMLElement {
@@ -352,6 +364,125 @@ class BookManager extends HTMLElement {
         this.render();
     }
 
+    getFormTemplate(book) {
+        return `
+            <form class="add-form" onsubmit="this.getRootNode().host.handleFormSubmit(event)">
+                <div class="form-content">
+                    <div class="form-group">
+                        <label for="title">Гарчиг *</label>
+                        <input type="text" name="title" required 
+                            value="${book?.title || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Зохиолч *</label>
+                        <input type="text" name="author" required 
+                            value="${book?.author || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Үнэ *</label>
+                        <input type="number" name="price" step="0.01" required 
+                            value="${book?.price || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Ангилал *</label>
+                        <select name="category" required>
+                            ${['fiction', 'non-fiction', 'science', 'technology']
+                                .map(cat => `<option value="${cat}" 
+                                    ${book?.category === cat ? 'selected' : ''}>
+                                    ${cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                </option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="isbn">ISBN *</label>
+                        <input type="text" name="isbn" required 
+                            value="${book?.isbn || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="publish_date">Хэвлэгдсэн огноо</label>
+                        <input type="date" name="publish_date" 
+                            value="${book?.publish_date || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="publisher">Хэвлэх газар</label>
+                        <input type="text" name="publisher" 
+                            value="${book?.publisher || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="language">Хэл</label>
+                        <input type="text" name="language" 
+                            value="${book?.language || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="pages">Хуудас</label>
+                        <input type="number" name="pages" min="1" 
+                            value="${book?.pages || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="format">Формат</label>
+                        <select name="format">
+                            ${['hardcover', 'paperback', 'ebook', 'audiobook']
+                                .map(format => `<option value="${format}" 
+                                    ${book?.format === format ? 'selected' : ''}>
+                                    ${format.charAt(0).toUpperCase() + format.slice(1)}
+                                </option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Тодорхойлолт</label>
+                        <textarea name="description">${book?.description || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cover_image">Зураг URL</label>
+                        <input type="url" name="cover_image" 
+                            value="${book?.cover_image || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Үнэлгээ (0-5)</label>
+                        <input type="number" name="rating" min="0" max="5" step="0.1" 
+                            value="${book?.rating || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="reviews">Нийт үнэлсэн</label>
+                        <input type="number" name="reviews" min="0" 
+                            value="${book?.reviews || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="in_stock">Нөөцөд байгаа эсэх</label>
+                        <select name="in_stock">
+                            <option value="true" ${book?.in_stock === true ? 'selected' : ''}>Yes</option>
+                            <option value="false" ${book?.in_stock === false ? 'selected' : ''}>No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="add-btn">
+                        ${book ? 'Хадгалах' : 'Нэмэх'}
+                    </button>
+                    <button type="button" onclick="this.getRootNode().host.toggleForm()" 
+                        class="cancel-btn">Болих</button>
+                </div>
+            </form>
+        `;
+    }
+
+    getBookItemTemplate(book) {
+        return `
+            <div class="book-item" data-id="${book.id}">
+                <div class="book-info">
+                    <h3>${book.title}</h3>
+                    <p>${book.author}</p>
+                </div>
+                <div>₮${book.price}</div>
+                <div>${book.category}</div>
+                <div class="actions">
+                    <button class="edit-btn">Засах</button>
+                    <button class="delete-btn">Устгах</button>
+                </div>
+            </div>
+        `;
+    }
+
     render() {
         this.shadowRoot.innerHTML = '';
         this.shadowRoot.appendChild(managerTemplate.content.cloneNode(true));
@@ -360,135 +491,37 @@ class BookManager extends HTMLElement {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error';
             errorDiv.textContent = this.state.error;
-            this.shadowRoot.querySelector('.book-manager').insertBefore(errorDiv, this.shadowRoot.querySelector('#modal-slot'));
+            this.shadowRoot.querySelector('slot[name="error"]').appendChild(errorDiv);
         }
 
         const bookGrid = this.shadowRoot.querySelector('.book-grid');
-        bookGrid.innerHTML = this.state.books.map(book => `
-            <div class="book-item">
-                <div class="book-info">
-                    <h3>${book.title}</h3>
-                    <p>${book.author}</p>
-                </div>
-                <div>₮${book.price}</div>
-                <div>${book.category}</div>
-                <div class="actions">
-                    <button class="edit-btn" 
-                        onclick="this.getRootNode().host.editBook(${book.id})">
-                        Засах
-                    </button>
-                    <button class="delete-btn" 
-                        onclick="this.getRootNode().host.handleDeleteBook(${book.id})">
-                        Устгах
-                    </button>
-                </div>
-            </div>
-        `).join('');
+        bookGrid.innerHTML = this.state.books.map(book => 
+            this.getBookItemTemplate(book)
+        ).join('');
 
         if (this.state.showForm) {
-            const modalWrapper = this.shadowRoot.querySelector('#modal-slot');
+            const modalWrapper = this.shadowRoot.querySelector('slot[name="modal"]');
             modalWrapper.innerHTML = `
                 <modal-dialog>
-                    <form slot="body" class="add-form" onsubmit="this.getRootNode().host.handleFormSubmit(event)">
-                        <div class="form-content">
-                            <div class="form-group">
-                                <label for="title">Гарчиг *</label>
-                                <input type="text" name="title" required 
-                                    value="${this.state.editingBook?.title || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="author">Зохиолч *</label>
-                                <input type="text" name="author" required 
-                                    value="${this.state.editingBook?.author || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="price">Үнэ *</label>
-                                <input type="number" name="price" step="0.01" required 
-                                    value="${this.state.editingBook?.price || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="category">Ангилал *</label>
-                                <select name="category" required>
-                                    ${['fiction', 'non-fiction', 'science', 'technology']
-                                        .map(cat => `<option value="${cat}" 
-                                            ${this.state.editingBook?.category === cat ? 'selected' : ''}>
-                                            ${cat.charAt(0).toUpperCase() + cat.slice(1)}
-                                        </option>`).join('')}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="isbn">ISBN *</label>
-                                <input type="text" name="isbn" required 
-                                    value="${this.state.editingBook?.isbn || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="publish_date">Хэвлэгдсэн огноо</label>
-                                <input type="date" name="publish_date" 
-                                    value="${this.state.editingBook?.publish_date || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="publisher">Хэвлэх газар</label>
-                                <input type="text" name="publisher" 
-                                    value="${this.state.editingBook?.publisher || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="language">Хэл</label>
-                                <input type="text" name="language" 
-                                    value="${this.state.editingBook?.language || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="pages">Хуудас</label>
-                                <input type="number" name="pages" min="1" 
-                                    value="${this.state.editingBook?.pages || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="format">Формат</label>
-                                <select name="format">
-                                    ${['hardcover', 'paperback', 'ebook', 'audiobook']
-                                        .map(format => `<option value="${format}" 
-                                            ${this.state.editingBook?.format === format ? 'selected' : ''}>
-                                            ${format.charAt(0).toUpperCase() + format.slice(1)}
-                                        </option>`).join('')}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Тодорхойлолт</label>
-                                <textarea name="description">${this.state.editingBook?.description || ''}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="cover_image">Зураг URL</label>
-                                <input type="url" name="cover_image" 
-                                    value="${this.state.editingBook?.cover_image || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="rating">Үнэлгээ (0-5)</label>
-                                <input type="number" name="rating" min="0" max="5" step="0.1" 
-                                    value="${this.state.editingBook?.rating || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="reviews">Нийт үнэлсэн</label>
-                                <input type="number" name="reviews" min="0" 
-                                    value="${this.state.editingBook?.reviews || ''}">
-                            </div>
-                            <div class="form-group">
-                                <label for="in_stock">Нөөцөд байгаа эсэх</label>
-                                <select name="in_stock">
-                                    <option value="true" ${this.state.editingBook?.in_stock === true ? 'selected' : ''}>Yes</option>
-                                    <option value="false" ${this.state.editingBook?.in_stock === false ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="add-btn">
-                                ${this.state.editingBook ? 'Хадгалах' : 'Нэмэх'}
-                            </button>
-                            <button type="button" onclick="this.getRootNode().host.toggleForm()" 
-                                class="cancel-btn">Болих</button>
-                        </div>
-                    </form>
+                    <div slot="body">
+                        ${this.getFormTemplate(this.state.editingBook)}
+                    </div>
                 </modal-dialog>
             `;
         }
+
+        // Use event delegation for book actions
+        bookGrid.addEventListener('click', (e) => {
+            const bookItem = e.target.closest('.book-item');
+            if (!bookItem) return;
+            
+            const bookId = bookItem.dataset.id;
+            if (e.target.matches('.edit-btn')) {
+                this.editBook(bookId);
+            } else if (e.target.matches('.delete-btn')) {
+                this.handleDeleteBook(bookId);
+            }
+        });
 
         // Add event listener for modal close
         const modal = this.shadowRoot.querySelector('modal-dialog');

@@ -56,7 +56,12 @@ modalTemplate.innerHTML = `
         }
     </style>
     <div class="modal-content">
-        <slot name="body"></slot>
+        <div class="modal-body">
+            <slot name="body"></slot>
+        </div>
+        <div class="modal-footer">
+            <slot name="footer"></slot>
+        </div>
     </div>
 `;
 
@@ -68,11 +73,12 @@ class ModalDialog extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.appendChild(modalTemplate.content.cloneNode(true));
+        this.setupCloseButton();
     }
 
-    render() {
+    setupCloseButton() {
         this.shadowRoot
-            .querySelector('#modal-close')
+            .getElementById('modal-close')
             .addEventListener('click', () => {
                 this.dispatchEvent(new CustomEvent('modal-close'));
             });
