@@ -54,9 +54,17 @@ class BookItem extends HTMLElement {
     render() {
         const { title, price, author, id, category, image } = this.dataset;
         const isLiked = LikesStorage.isLiked(id);
+        if (isLiked) {
+            this.setAttribute('liked', '');
+        } else {
+            this.removeAttribute('liked');
+        }
 
         this.shadowRoot.innerHTML = `
             <style>
+                :host([liked]) .book-card {
+                    border: 2px solid red;
+                }
                 .book-card {
                     background: var(--book-card-bg);
                     border: 1px solid var(--border-color);
