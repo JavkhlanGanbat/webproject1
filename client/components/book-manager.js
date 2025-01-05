@@ -388,8 +388,7 @@ class BookManager extends HTMLElement {
         if (this.state.showForm) {
             const modalWrapper = this.shadowRoot.querySelector('#modal-slot');
             modalWrapper.innerHTML = `
-                <modal-dialog header="${this.state.editingBook ? 'Ном засах' : 'Шинэ ном нэмэх'}">
-                    <div slot="header"><!-- Additional header elements if needed --></div>
+                <modal-dialog>
                     <form slot="body" class="add-form" onsubmit="this.getRootNode().host.handleFormSubmit(event)">
                         <div class="form-content">
                             <div class="form-group">

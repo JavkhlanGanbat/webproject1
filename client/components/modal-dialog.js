@@ -55,12 +55,6 @@ modalTemplate.innerHTML = `
             }
         }
     </style>
-    <div class="modal-header">
-        <slot name="header">
-            <h3><!-- fallback --> </h3>
-        </slot>
-        <button class="close-btn" id="modal-close">×</button>
-    </div>
     <div class="modal-content">
         <slot name="body"></slot>
     </div>
@@ -74,13 +68,6 @@ class ModalDialog extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.appendChild(modalTemplate.content.cloneNode(true));
-        this.shadowRoot.querySelector('h3').textContent =
-            this.getAttribute('header') || '';
-        this.addEventListener('click', (e) => {
-            if (e.target === this) {
-                this.dispatchEvent(new CustomEvent('modal-close'));
-            }
-        });
     }
 
     render() {
