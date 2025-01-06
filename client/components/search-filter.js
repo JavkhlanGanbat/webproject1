@@ -10,6 +10,7 @@
 class SearchFilter extends HTMLElement {
     // Ажиглах шинж чанарууд
     static get observedAttributes() {
+        // Энэ массив дотор компонент ажиглах атрибутуудыг жагсаана
         return ['data-search', 'data-sort', 'data-category'];
     }
 
@@ -34,11 +35,13 @@ class SearchFilter extends HTMLElement {
     }
 
     constructor() {
+        // Компонент үүсэх үед shadow DOM -г идэвхжүүлж, эхний төлөвийг үүсгэнэ
         super();
         this.attachShadow({ mode: 'open' });
     }
 
     updateInput(id, value) {
+        // Энэ функц нь shadow DOM дээрх input элементийн утгыг шинэчилж, dataset-д хадгална
         if (this.shadowRoot) {
             const element = this.shadowRoot.getElementById(id);
             if (element) {
@@ -50,6 +53,7 @@ class SearchFilter extends HTMLElement {
 
     // URL параметрүүдээс анхны утгуудыг унших
     connectedCallback() {
+        // Компонент DOM-д холбогдох үед дуудагдах ба display-ийн бүтцийг үүсгэж, анхны утгуудыг URL-с уншина
         this.render();
         this.addEventListeners();
         
@@ -63,6 +67,7 @@ class SearchFilter extends HTMLElement {
 
     // Шинж чанар өөрчлөгдөх үед дуудагдах
     attributeChangedCallback(name, oldValue, newValue) {
+        // Ажиглагдсан шинж чанарын утга өөрчлөгдөх үед энэ функц дуудагдана
         if (oldValue === newValue) return;
         
         const attr = name.replace('data-', '');
@@ -73,6 +78,7 @@ class SearchFilter extends HTMLElement {
 
     // Оролтын утгуудыг шинэчлэх
     updateInputs() {
+        // Хэрэглэгчийн dataset-д суурилан input болон select-ийн утгуудыг шинэчилнэ
         if (!this.shadowRoot) return;
         
         const searchInput = this.shadowRoot.getElementById('search');
@@ -86,6 +92,7 @@ class SearchFilter extends HTMLElement {
 
     // Үйл явдал сонсогчдыг тохируулах
     addEventListeners() {
+        // Оролтын талбар, товч, сонголтууд дээр listener-үүдийг нэмэх
         const searchInput = this.shadowRoot.getElementById('search');
         const searchButton = this.shadowRoot.getElementById('searchButton');
         const sortSelect = this.shadowRoot.getElementById('sort');
@@ -109,6 +116,7 @@ class SearchFilter extends HTMLElement {
 
     // Шүүлтүүр өөрчлөгдөх үед дуудагдах
     emitFilterChange() {
+        // Шүүлтүүрийн утгуудыг аван URL-г шинэчилж filter-change эвентыг дуудагчид мэдэгдэнэ
         const searchInput = this.shadowRoot.getElementById('search');
         const sortSelect = this.shadowRoot.getElementById('sort');
         const categorySelect = this.shadowRoot.getElementById('category');
@@ -235,6 +243,7 @@ class SearchFilter extends HTMLElement {
 
     // Шүүлтүүрүүдийг дахин тохируулах
     resetFilters() {
+        // Бүх шүүлтүүрийг анхны төлөвт оруулж, үр дүнг дахин ачаална
         if (!this.shadowRoot) return;
         
         const searchInput = this.shadowRoot.getElementById('search');

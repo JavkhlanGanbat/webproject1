@@ -2,18 +2,21 @@ import { BookService } from '../js/bookService.js';
 
 class BookDetail extends HTMLElement {
     constructor() {
+        // Компонент үүсэх үед shadow DOM үүсгэж book обьектыг хадгалах төлөвийг бэлдэнэ
         super();
         this.attachShadow({ mode: 'open' });
         this.book = null;
     }
 
     async connectedCallback() {
+        // Компонент DOM-т холбогдох үед URL-с номын ID-г уншиж, loadBook-оор дамжуулан номын мэдээлэл татна
         const params = new URLSearchParams(window.location.search);
         const bookId = params.get('id');
         await this.loadBook(bookId);
     }
 
     async loadBook(bookId) {
+        // Бодит номын мэдээллийг серверээс татна, олдохгүй бол алдаа харуулна
         try {
             if (!bookId) {
                 this.renderError();
@@ -46,6 +49,7 @@ class BookDetail extends HTMLElement {
     }
 
     renderError() {
+        // Ном олдохгүй буюу алдаа гарахад хэрэглэгчид үзүүлэх UI-г дүрслэх
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
@@ -260,6 +264,7 @@ class BookDetail extends HTMLElement {
     }
 
     render() {
+        // Татсан номын мэдээллийг ашиглан дэлгэрэнгүй үзүүлнэ
         if (!this.book) return;
 
         const book = {
@@ -359,7 +364,7 @@ class BookDetail extends HTMLElement {
                     background: var(--bg-color);
                     padding: clamp(0.75rem, 2vw, 1.25rem);
                     border-radius: 8px;
-                    border: 1px solid var(--border-color);
+                    border: 1px солид вар(--border-color);
                 }
 
                 .detail-item {
@@ -520,6 +525,7 @@ class BookDetail extends HTMLElement {
     }
 
     addToCart() {
+        // Номыг сагслах эвентыг дуудагчдад мэдэгдэнэ
         if (!this.book) return;
         
         const bookData = {

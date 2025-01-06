@@ -11,6 +11,7 @@ import { BookService } from '../js/bookService.js';
 class BookList extends HTMLElement {
     constructor() {
         super();
+        // Компонент үүсэх үед shadow DOM болон state-г бэлтгэнэ
         // Shadow DOM ашиглан компонентын дотоод бүтцийг тусгаарлана
         this.attachShadow({ mode: 'open' });
         // Анхны төлөвийг тохируулах
@@ -19,6 +20,7 @@ class BookList extends HTMLElement {
 
     // Анхны төлөвийг URL-с уншиж авах
     getInitialState() {
+        // URL params-оос эхлэх төлөвийг уншиж, буцаана
         const params = new URLSearchParams(window.location.search);
         return {
             page: parseInt(params.get('page')) || 1,        // Идэвхтэй хуудас
@@ -37,6 +39,7 @@ class BookList extends HTMLElement {
 
     // Компонент DOM-д холбогдох үед дуудагдах функц
     async connectedCallback() {
+        // Компонент DOM-т холбогдох үед дуудна. Энд номын жагсаалтыг эхлэн татаж, event listener-үүдийг тогтооно
         this.state = this.getInitialState();
         await this.fetchBooks();
         this.setupEventListeners();
@@ -51,6 +54,7 @@ class BookList extends HTMLElement {
 
     // Үйл явдал сонсогчдыг тохируулах
     setupEventListeners() {
+        // Шүүлтүүр болон хуудсын өөрчлөлтийн event listener-үүдийг нэмнэ
         // Шүүлтүүр өөрчлөгдөх үед
         this.shadowRoot.addEventListener('filter-change', (e) => this.handleFilterChange(e.detail));
         // Хуудас сонгох үед
@@ -59,6 +63,7 @@ class BookList extends HTMLElement {
 
     // Шүүлтүүр өөрчлөгдөх үед дуудагдах функц
     async handleFilterChange(filters) {
+        // Шүүлтүүрийн утгуудыг state-д хадгалж, номын жагсаалтыг сэргээж татна
         this.state = {
             ...this.state,
             page: 1,
@@ -69,6 +74,7 @@ class BookList extends HTMLElement {
 
     // Хуудас өөрчлөгдөх үед дуудагдах функц
     async handlePageChange(page) {
+        // Хуудасны дугаар өөрчлөгдөх үед URL-д шинэчлэх ба номыг дахин татна
         // Update URL with new page number
         const params = new URLSearchParams(window.location.search);
         params.set('page', page);
@@ -80,6 +86,7 @@ class BookList extends HTMLElement {
 
     // Серверээс номын жагсаалт татах
     async fetchBooks() {
+        // BookService-ээс номын мэдээлэл татах ба state-ийн утгаа шинэчилнэ
         try {
             this.state.loading = true;
             this.render();
@@ -121,6 +128,7 @@ class BookList extends HTMLElement {
 
     // Компонентыг дүрслэх функц
     render() {
+        // Номын жагсаалт болон бусад UI элементүүдийг дүрслэх
         this.shadowRoot.innerHTML = `
             <style>
                 .book-grid {
@@ -248,12 +256,14 @@ class BookList extends HTMLElement {
 
     // Идэвхтэй шүүлтүүр байгаа эсэхийг шалгах
     hasActiveFilters() {
+        // Одоогоор идэвхтэй шүүлтүүр байгаа эсэхийг шалгаж true/false буцаана
         return this.state.filters.search.trim() !== '' || 
                this.state.filters.category !== 'all';
     }
 
     // Бүх шүүлтүүрийг цэвэрлэх
     clearFilters() {
+        // Бүх шүүлтүүрийг reset хийж, search-filter компонентод мэдэгдэнэ
         this.state.filters = {
             search: '',
             sort: 'none',
