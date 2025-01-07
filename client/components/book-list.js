@@ -32,7 +32,6 @@ class BookList extends HTMLElement {
             },
             books: [],          // Номын жагсаалт
             totalPages: 0,      // Нийт хуудасны тоо
-            loading: false,     // Ачаалж байгаа эсэх
             error: null         // Алдааны мэдээлэл
         };
     }
@@ -88,7 +87,6 @@ class BookList extends HTMLElement {
     async fetchBooks() {
         // BookService-ээс номын мэдээлэл татах ба state-ийн утгаа шинэчилнэ
         try {
-            this.state.loading = true;
             this.render();
 
             const params = {
@@ -103,12 +101,10 @@ class BookList extends HTMLElement {
                 ...this.state,
                 books,
                 totalPages,
-                loading: false,
                 error: null
             };
         } catch (error) {
             this.state.error = 'Failed to load books';
-            this.state.loading = false;
         } finally {
             this.render();
         }
@@ -199,11 +195,10 @@ class BookList extends HTMLElement {
                     font-size: 0.8em;
                     margin-left: 10px;
                 }
-                .loading { opacity: 0.5; }
                 .error { color: red; padding: 20px; text-align: center; }
             </style>
             ${this.state.error ? `<div class="error">${this.state.error}</div>` : ''}
-            <div class="${this.state.loading ? 'loading' : ''}">
+            <div>
                 <search-filter
                     data-search="${this.state.filters.search}"
                     data-sort="${this.state.filters.sort}"
