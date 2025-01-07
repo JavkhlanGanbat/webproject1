@@ -12,7 +12,7 @@ import { Router } from '../js/router.js';
 class BookItem extends HTMLElement {
     // Ажиглах шинж чанарууд
     static get observedAttributes() {
-        return ['data-price', 'data-title'];
+        return ['data-price', 'data-title', 'data-author', 'data-isbn'];
     }
 
     // Үнийн getter, setter
@@ -37,6 +37,28 @@ class BookItem extends HTMLElement {
         this.render();
     }
 
+    // Зохиогчийн getter, setter
+    get author() {
+        return this._author || '';
+    }
+
+    set author(value) {
+        this._author = value;
+        this.dataset.author = value;
+        this.render();
+    }
+
+    // Ангиллын getter, setter
+    get category() {
+        return this._category || '';
+    }
+
+    set category(value) {
+        this._category = value;
+        this.dataset.category = value;
+        this.render();
+    }
+
     constructor() {
         super();
         // Shadow DOM ашиглан компонентын дотоод бүтцийг тусгаарлана
@@ -48,6 +70,8 @@ class BookItem extends HTMLElement {
         if (oldValue === newValue) return;
         if (name === 'data-price') this.price = newValue;
         if (name === 'data-title') this.title = newValue;
+        if (name === 'data-author') this.author = newValue;
+        if (name === 'data-isbn') this.isbn = newValue;
     }
 
     // Компонент DOM-д холбогдох үед дуудагдах функц
