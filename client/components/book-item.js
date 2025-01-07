@@ -10,6 +10,54 @@ import { LikesStorage } from '../js/likesStorage.js';
 import { Router } from '../js/router.js';
 
 class BookItem extends HTMLElement {
+    // Ажиглах шинж чанарууд
+    static get observedAttributes() {
+        return ['data-price', 'data-title', 'data-author', 'data-isbn'];
+    }
+
+    // Үнийн getter, setter
+    get price() {
+        return this._price || 0;
+    }
+
+    set price(value) {
+        this._price = value;
+        this.dataset.price = value;
+        this.render();
+    }
+
+    // Гарчгийн getter, setter
+    get title() {
+        return this._title || '';
+    }
+
+    set title(value) {
+        this._title = value;
+        this.dataset.title = value;
+        this.render();
+    }
+
+    // Зохиогчийн getter, setter
+    get author() {
+        return this._author || '';
+    }
+
+    set author(value) {
+        this._author = value;
+        this.dataset.author = value;
+        this.render();
+    }
+
+    // Ангиллын getter, setter
+    get category() {
+        return this._category || '';
+    }
+
+    set category(value) {
+        this._category = value;
+        this.dataset.category = value;
+        this.render();
+    }
 
     constructor() {
         super();
