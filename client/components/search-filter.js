@@ -8,32 +8,7 @@
  */
 
 class SearchFilter extends HTMLElement {
-    // Ажиглах шинж чанарууд
-    static get observedAttributes() {
-        // Энэ массив дотор компонент ажиглах атрибутуудыг жагсаана
-        return ['data-search', 'data-sort', 'data-category'];
-    }
-
-    // Хайлтын утгын getter, setter
-    get searchValue() {
-        return this._searchValue || '';
-    }
-    
-    set searchValue(value) {
-        this._searchValue = value;
-        this.updateInput('search', value);
-    }
-
-    // Эрэмбэлэх утгын getter, setter
-    get sortValue() {
-        return this._sortValue || 'price_asc';
-    }
-
-    set sortValue(value) {
-        this._sortValue = value;
-        this.updateInput('sort', value);
-    }
-
+ 
     constructor() {
         // Компонент үүсэх үед shadow DOM -г идэвхжүүлж, эхний төлөвийг үүсгэнэ
         super();

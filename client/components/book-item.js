@@ -16,16 +16,7 @@ class BookItem extends HTMLElement {
         // Shadow DOM ашиглан компонентын дотоод бүтцийг тусгаарлана
         this.attachShadow({ mode: 'open' });
     }
-
-    // Шинж чанар өөрчлөгдөх үед дуудагдах функц
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return;
-        if (name === 'data-price') this.price = newValue;
-        if (name === 'data-title') this.title = newValue;
-        if (name === 'data-author') this.author = newValue;
-        if (name === 'data-isbn') this.isbn = newValue;
-    }
-
+    
     // Компонент DOM-д холбогдох үед дуудагдах функц
     connectedCallback() {
         this.render();
