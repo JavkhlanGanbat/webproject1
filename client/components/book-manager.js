@@ -8,7 +8,7 @@
  * - Алдааны мэдээлэл харуулах
  */
 
-import { BookService } from '../js/bookService.js';
+import { BookService } from '../js/BookService.js';
 import './modal-dialog.js';
 
 // Удирдлагын хэсгийн загвар
