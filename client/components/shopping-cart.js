@@ -1,8 +1,26 @@
-class ShoppingCart extends HTMLElement {
+export class ShoppingCart extends HTMLElement {
+    #items = [];
+    #loading = false;
+
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        this.items = this.loadItems();
+    }
+
+    connectedCallback() {
+        this.#items = this.loadItems();
+        this.setupEventListeners();
+        this.render();
+    }
+
+    setupEventListeners() {
+        window.addEventListener('add-to-cart', (e) => this.addItem(e.detail));
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'cartItems') {
+                this.#items = JSON.parse(e.newValue || '[]');
+                this.render();
+            }
+        });
     }
 
     loadItems() {
@@ -11,50 +29,63 @@ class ShoppingCart extends HTMLElement {
     }
 
     saveItems() {
-        localStorage.setItem('cartItems', JSON.stringify(this.items));
+        localStorage.setItem('cartItems', JSON.stringify(this.#items));
     }
 
-    connectedCallback() {
-        window.addEventListener('add-to-cart', (e) => this.addItem(e.detail));
+    get total() {
+        return this.#items.reduce((sum, item) => 
+            sum + (Number(item.price) * (item.quantity || 1)), 0
+        );
+    }
+
+    async addItem(item) {
+        this.#loading = true;
         this.render();
+
+        try {
+            const existingIndex = this.findItemIndex(item);
+            if (existingIndex !== -1) {
+                this.#items[existingIndex].quantity = 
+                    (this.#items[existingIndex].quantity || 1) + 1;
+            } else {
+                this.#items.push({ ...item, quantity: 1 });
+            }
+            this.saveItems();
+            this.dispatchEvent(new CustomEvent('cart-updated', {
+                bubbles: true,
+                composed: true,
+                detail: { items: this.#items }
+            }));
+        } catch (error) {
+            console.error('Failed to add item:', error);
+        } finally {
+            this.#loading = false;
+            this.render();
+        }
     }
 
     findItemIndex(newItem) {
-        return this.items.findIndex(item => item.id === newItem.id);
-    }
-
-    addItem(item) {
-        const existingIndex = this.findItemIndex(item);
-        if (existingIndex !== -1) {
-            // Increment quantity if item exists
-            this.items[existingIndex].quantity = (this.items[existingIndex].quantity || 1) + 1;
-        } else {
-            // Add new item with quantity 1
-            item.quantity = 1;
-            this.items.push(item);
-        }
-        this.saveItems();
-        this.render();
+        return this.#items.findIndex(item => item.id === newItem.id);
     }
 
     removeItem(index) {
-        this.items.splice(index, 1);
+        this.#items.splice(index, 1);
         this.saveItems();
         this.render();
     }
 
     decreaseQuantity(index) {
-        if (this.items[index].quantity > 1) {
-            this.items[index].quantity--;
+        if (this.#items[index].quantity > 1) {
+            this.#items[index].quantity--;
         } else {
-            this.items.splice(index, 1);
+            this.#items.splice(index, 1);
         }
         this.saveItems();
         this.render();
     }
 
     render() {
-        const total = this.items.reduce((sum, item) => sum + (Number(item.price) * (item.quantity || 1)), 0);
+        const total = this.#items.reduce((sum, item) => sum + (Number(item.price) * (item.quantity || 1)), 0);
         
         this.shadowRoot.innerHTML = `
             <style>
@@ -106,32 +137,44 @@ class ShoppingCart extends HTMLElement {
                     font-size: 1.2em;
                 }
             </style>
+            ${this.#loading ? '<div class="loading">Updating cart...</div>' : ''}
             <div class="cart">
-                <h2>Сагс</h2>
-                ${this.items.length === 0 ? 
-                    '<p>Таны сагс хоосон байна</p>' : 
-                    this.items.map((item, index) => `
-                        <div class="cart-item">
-                            <span>${item.title}</span>
-                            <div class="quantity-controls">
-                                <span>₮${(item.price * (item.quantity || 1)).toFixed(2)}</span>
-                                <span>(${item.quantity || 1}x)</span>
-                                ${item.quantity > 1 ? 
-                                    `<button class="decrease-btn" 
-                                        onclick="this.getRootNode().host.decreaseQuantity(${index})">
-                                        −
-                                    </button>` :
-                                    `<button class="remove-btn" 
-                                        onclick="this.getRootNode().host.decreaseQuantity(${index})">
-                                        ×
-                                    </button>`
-                                }
-                            </div>
-                        </div>
-                    `).join('')}
-                <div class="total">
-                    Нийт үнэ: ₮${total.toFixed(2)}
+                <h2>Сагс (${this.#items.length})</h2>
+                ${this.renderItems()}
+                ${this.renderTotal()}
+            </div>
+        `;
+    }
+
+    renderItems() {
+        if (this.#items.length === 0) {
+            return '<p>Таны сагс хоосон байна</p>';
+        }
+        return this.#items.map((item, index) => `
+            <div class="cart-item">
+                <span>${item.title}</span>
+                <div class="quantity-controls">
+                    <span>₮${(item.price * (item.quantity || 1)).toFixed(2)}</span>
+                    <span>(${item.quantity || 1}x)</span>
+                    ${item.quantity > 1 ? 
+                        `<button class="decrease-btn" 
+                            onclick="this.getRootNode().host.decreaseQuantity(${index})">
+                            −
+                        </button>` :
+                        `<button class="remove-btn" 
+                            onclick="this.getRootNode().host.removeItem(${index})">
+                            ×
+                        </button>`
+                    }
                 </div>
+            </div>
+        `).join('');
+    }
+
+    renderTotal() {
+        return `
+            <div class="total">
+                Нийт үнэ: ₮${this.total.toFixed(2)}
             </div>
         `;
     }

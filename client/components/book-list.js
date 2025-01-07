@@ -6,7 +6,7 @@
  * - Шүүлтүүр хийх
  * - Эрэмбэлэх зэрэг үндсэн үйлдлүүдийг гүйцэтгэнэ
  */
-import { BookService } from '../js/bookService.js';
+import { BookService } from '../js/BookService.js';
 
 class BookList extends HTMLElement {
     constructor() {

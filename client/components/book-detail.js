@@ -1,4 +1,4 @@
-import { BookService } from '../js/bookService.js';
+import { BookService } from '../js/BookService.js';
 
 class BookDetail extends HTMLElement {
     constructor() {
