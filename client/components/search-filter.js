@@ -8,47 +8,11 @@
  */
 
 class SearchFilter extends HTMLElement {
-    // Ажиглах шинж чанарууд
-    static get observedAttributes() {
-        // Энэ массив дотор компонент ажиглах атрибутуудыг жагсаана
-        return ['data-search', 'data-sort', 'data-category'];
-    }
-
-    // Хайлтын утгын getter, setter
-    get searchValue() {
-        return this._searchValue || '';
-    }
-    
-    set searchValue(value) {
-        this._searchValue = value;
-        this.updateInput('search', value);
-    }
-
-    // Эрэмбэлэх утгын getter, setter
-    get sortValue() {
-        return this._sortValue || 'price_asc';
-    }
-
-    set sortValue(value) {
-        this._sortValue = value;
-        this.updateInput('sort', value);
-    }
-
+ 
     constructor() {
         // Компонент үүсэх үед shadow DOM -г идэвхжүүлж, эхний төлөвийг үүсгэнэ
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    updateInput(id, value) {
-        // Энэ функц нь shadow DOM дээрх input элементийн утгыг шинэчилж, dataset-д хадгална
-        if (this.shadowRoot) {
-            const element = this.shadowRoot.getElementById(id);
-            if (element) {
-                element.value = value;
-                this.dataset[id] = value;
-            }
-        }
     }
 
     // URL параметрүүдээс анхны утгуудыг унших
@@ -63,17 +27,6 @@ class SearchFilter extends HTMLElement {
         this.dataset.sort = params.get('sort') || 'price_asc';
         this.dataset.category = params.get('category') || 'all';
         this.updateInputs();
-    }
-
-    // Шинж чанар өөрчлөгдөх үед дуудагдах
-    attributeChangedCallback(name, oldValue, newValue) {
-        // Ажиглагдсан шинж чанарын утга өөрчлөгдөх үед энэ функц дуудагдана
-        if (oldValue === newValue) return;
-        
-        const attr = name.replace('data-', '');
-        if (attr === 'search') this.searchValue = newValue;
-        else if (attr === 'sort') this.sortValue = newValue;
-        else if (attr === 'category') this.updateInput('category', newValue);
     }
 
     // Оролтын утгуудыг шинэчлэх
